@@ -3,14 +3,20 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
+// ─── CONSTANTS ─────────────────────────────────────────────────────────────────
+
+const PURPLE = "#5D55F0";
+const TEAL = "#18CC90";
+const RED = "#E04360";
+
 // ─── DATA ──────────────────────────────────────────────────────────────────────
 
 const sections = [
   {
     id: "purpose",
-    label: "01",
+    index: "01",
     title: "Purpose",
-    accent: "purple",
+    accent: PURPLE,
     items: [
       {
         n: "01",
@@ -31,9 +37,9 @@ const sections = [
   },
   {
     id: "advantage",
-    label: "02",
+    index: "02",
     title: "Unique Advantage",
-    accent: "teal",
+    accent: TEAL,
     items: [
       {
         n: "04",
@@ -67,9 +73,9 @@ const sections = [
   },
   {
     id: "market",
-    label: "03",
+    index: "03",
     title: "The Market",
-    accent: "purple",
+    accent: PURPLE,
     items: [
       {
         n: "09",
@@ -90,23 +96,23 @@ const sections = [
   },
   {
     id: "choices",
-    label: "04",
+    index: "04",
     title: "Strategic Choices",
-    accent: "teal",
+    accent: TEAL,
     items: [
       {
         n: "12",
         q: "What we will always do",
         a: "Prioritize network growth, execution speed, and real provider-client matching that generates measurable economic value.",
         badge: "Always",
-        badgeColor: "teal",
+        badgeColor: TEAL,
       },
       {
         n: "13",
         q: "What we will never do",
         a: "Become a generic directory or sacrifice trust and quality for short-term growth.",
         badge: "Never",
-        badgeColor: "red",
+        badgeColor: RED,
       },
       {
         n: "14",
@@ -128,9 +134,9 @@ const sections = [
   },
   {
     id: "execution",
-    label: "05",
+    index: "05",
     title: "Execution System",
-    accent: "purple",
+    accent: PURPLE,
     items: [
       {
         n: "17",
@@ -161,13 +167,13 @@ const sections = [
   },
   {
     id: "story",
-    label: "06",
+    index: "06",
     title: "Strategic Story",
-    accent: "teal",
+    accent: TEAL,
     items: [
       {
         n: "20",
-        q: "The narrative we want team / customers to repeat",
+        q: "The narrative we want repeated",
         a: "Binderr is becoming the infrastructure layer for global business operations — those who join early gain disproportionate access, growth, and opportunity.",
       },
       {
@@ -181,7 +187,7 @@ const sections = [
   },
 ];
 
-type SectionItem = {
+type Item = {
   n: string;
   q: string;
   a: string;
@@ -194,9 +200,9 @@ type SectionItem = {
   bullets?: string[];
 };
 
-// ─── HELPERS ───────────────────────────────────────────────────────────────────
+// ─── HOOK ──────────────────────────────────────────────────────────────────────
 
-function useInView(threshold = 0.1) {
+function useInView(threshold = 0.08) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   useEffect(() => {
@@ -212,141 +218,232 @@ function useInView(threshold = 0.1) {
   return { ref, visible };
 }
 
-const PURPLE = "#5D55F0";
-const TEAL   = "#18CC90";
-const accentColor = (a: string) => (a === "teal" ? TEAL : PURPLE);
+// ─── CARD ──────────────────────────────────────────────────────────────────────
 
-// ─── GLASS CARD ────────────────────────────────────────────────────────────────
-
-function GlassCard({
-  item,
-  index,
-  accent,
-}: {
-  item: SectionItem;
-  index: number;
-  accent: string;
-}) {
+function QACard({ item, index, accent }: { item: Item; index: number; accent: string }) {
   const { ref, visible } = useInView();
-  const color = accentColor(accent);
+  const [hovered, setHovered] = useState(false);
   const isWide = item.big || item.highlight;
+
+  // Border gradient: accent on highlight, subtle white on normal
+  const borderBg = item.highlight
+    ? `linear-gradient(135deg, ${accent}55 0%, ${accent}20 50%, rgba(255,255,255,0.06) 100%)`
+    : hovered
+    ? `linear-gradient(145deg, rgba(255,255,255,0.13) 0%, rgba(255,255,255,0.04) 100%)`
+    : `linear-gradient(145deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%)`;
+
+  // Inner card bg
+  const cardBg = item.highlight
+    ? `linear-gradient(145deg, ${accent}12 0%, #050b14 100%)`
+    : hovered
+    ? `linear-gradient(145deg, #101e30 0%, #07101a 100%)`
+    : `linear-gradient(145deg, #0b1625 0%, #060d18 100%)`;
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 22 }}
       animate={visible ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5, delay: index * 0.07, ease: [0.16, 1, 0.3, 1] }}
-      className={`relative group rounded-3xl overflow-hidden ${isWide ? "md:col-span-2" : ""}`}
+      transition={{ duration: 0.55, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
+      className={isWide ? "card-wide" : ""}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      // Gradient border wrapper technique
       style={{
-        background: item.highlight
-          ? `linear-gradient(135deg, ${color}18 0%, rgba(0,14,22,0.6) 100%)`
-          : "rgba(26, 36, 48, 0.15)",
-        backdropFilter: "blur(20px)",
-        WebkitBackdropFilter: "blur(20px)",
-        border: `0.5px solid ${item.highlight ? `${color}40` : "rgba(255,255,255,0.07)"}`,
+        padding: "1px",
+        borderRadius: "24px",
+        background: borderBg,
         boxShadow: item.highlight
-          ? `0 0 60px ${color}15, inset 0 0 60px ${color}05`
-          : "none",
+          ? `0 4px 48px ${accent}18`
+          : hovered
+          ? `0 8px 48px rgba(0,0,0,0.5)`
+          : `0 2px 24px rgba(0,0,0,0.3)`,
+        transition: "background 0.35s ease, box-shadow 0.35s ease",
       }}
     >
-      {/* Hover gradient */}
       <div
-        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-3xl"
         style={{
-          background: `radial-gradient(500px circle at 0% 0%, ${color}10, transparent 60%)`,
+          borderRadius: "23px",
+          background: cardBg,
+          transition: "background 0.35s ease",
+          position: "relative",
+          overflow: "hidden",
+          height: "100%",
         }}
-      />
+      >
+        {/* Top glow line on hover */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: "15%",
+            right: "15%",
+            height: "1px",
+            background: `linear-gradient(90deg, transparent, ${accent}80, transparent)`,
+            opacity: hovered ? 1 : 0,
+            transition: "opacity 0.35s ease",
+          }}
+        />
 
-      {/* Gradient top edge */}
-      <div
-        className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-        style={{
-          background: `linear-gradient(90deg, transparent, ${color}60, transparent)`,
-        }}
-      />
+        {/* Radial glow inside on hover */}
+        <div
+          style={{
+            position: "absolute",
+            top: "-60px",
+            left: "-60px",
+            width: "300px",
+            height: "300px",
+            borderRadius: "50%",
+            background: `radial-gradient(circle, ${accent}10, transparent 70%)`,
+            opacity: hovered ? 1 : 0,
+            transition: "opacity 0.5s ease",
+            pointerEvents: "none",
+          }}
+        />
 
-      <div className={`relative p-8 ${isWide ? "md:p-10" : ""}`}>
-        {/* Badge */}
-        {item.badge && (
-          <span
-            className="absolute top-6 right-6 text-[10px] font-semibold tracking-[0.2em] uppercase px-3 py-1 rounded-full"
+        <div style={{ padding: isWide ? "40px 44px" : "36px 36px", height: "100%", position: "relative" }}>
+          {/* Badge */}
+          {item.badge && (
+            <span
+              style={{
+                position: "absolute",
+                top: 28,
+                right: 28,
+                fontSize: "10px",
+                fontWeight: 600,
+                letterSpacing: "0.18em",
+                textTransform: "uppercase",
+                color: item.badgeColor,
+                background: `${item.badgeColor}18`,
+                border: `1px solid ${item.badgeColor}30`,
+                padding: "4px 12px",
+                borderRadius: "100px",
+              }}
+            >
+              {item.badge}
+            </span>
+          )}
+
+          {/* Number */}
+          <p
             style={{
-              color: item.badgeColor === "teal" ? TEAL : item.badgeColor === "red" ? "#E04360" : color,
-              background: item.badgeColor === "teal"
-                ? "rgba(24,204,144,0.1)"
-                : item.badgeColor === "red"
-                ? "rgba(224,67,96,0.1)"
-                : `${color}15`,
-              border: `1px solid ${
-                item.badgeColor === "teal"
-                  ? "rgba(24,204,144,0.2)"
-                  : item.badgeColor === "red"
-                  ? "rgba(224,67,96,0.2)"
-                  : `${color}30`
-              }`,
+              fontSize: "11px",
+              fontWeight: 600,
+              letterSpacing: "0.28em",
+              textTransform: "uppercase",
+              color: accent,
+              marginBottom: "20px",
             }}
           >
-            {item.badge}
-          </span>
-        )}
+            {item.n}
+          </p>
 
-        {/* Number */}
-        <p
-          className="text-[11px] font-semibold tracking-[0.25em] uppercase mb-5"
-          style={{ color }}
-        >
-          {item.n}
-        </p>
-
-        {/* Question */}
-        <p
-          className="text-sm font-medium mb-4 leading-relaxed"
-          style={{ color: "#7F92AD" }}
-        >
-          {item.q}
-        </p>
-
-        {/* Answer */}
-        {item.big ? (
+          {/* Question */}
           <p
-            className="text-2xl md:text-3xl font-light leading-snug"
-            style={{ color: "#FFFFFF", lineHeight: 1.3 }}
+            style={{
+              fontSize: "14px",
+              fontWeight: 400,
+              color: "#7F92AD",
+              lineHeight: 1.5,
+              marginBottom: "16px",
+            }}
           >
-            {item.a}
+            {item.q}
           </p>
-        ) : item.bullets ? (
-          <ul className="space-y-3 mt-1">
-            {item.bullets.map((b, i) => (
-              <li key={i} className="flex items-start gap-3 text-[15px] leading-relaxed" style={{ color: "#CBD5E1" }}>
-                <span
-                  className="mt-2 w-1.5 h-1.5 rounded-full flex-shrink-0"
-                  style={{ background: color }}
-                />
-                {b}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="text-[15px] leading-relaxed" style={{ color: "#CBD5E1" }}>
-            {item.a}
-          </p>
-        )}
 
-        {/* Stat */}
-        {item.stat && (
-          <div className="mt-6 flex items-baseline gap-2.5">
-            <span
-              className="text-4xl font-semibold tracking-tight"
-              style={{ color }}
+          {/* Separator */}
+          <div
+            style={{
+              height: "1px",
+              background: item.highlight
+                ? `linear-gradient(90deg, ${accent}40, transparent)`
+                : "rgba(255,255,255,0.06)",
+              marginBottom: "20px",
+            }}
+          />
+
+          {/* Answer */}
+          {item.big ? (
+            <p
+              style={{
+                fontSize: "clamp(22px, 3.5vw, 32px)",
+                fontWeight: 500,
+                color: "#FFFFFF",
+                lineHeight: 1.25,
+                letterSpacing: "-0.01em",
+              }}
             >
-              {item.stat}
-            </span>
-            <span className="text-xs uppercase tracking-widest" style={{ color: "#7F92AD" }}>
-              {item.statLabel}
-            </span>
-          </div>
-        )}
+              {item.a}
+            </p>
+          ) : item.bullets ? (
+            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "12px" }}>
+              {item.bullets.map((b, i) => (
+                <li
+                  key={i}
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: "12px",
+                    fontSize: "15px",
+                    color: "#CBD8EA",
+                    lineHeight: 1.55,
+                  }}
+                >
+                  <span
+                    style={{
+                      marginTop: "8px",
+                      width: "5px",
+                      height: "5px",
+                      borderRadius: "50%",
+                      background: accent,
+                      flexShrink: 0,
+                    }}
+                  />
+                  {b}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p
+              style={{
+                fontSize: "16px",
+                fontWeight: 400,
+                color: "#CBD8EA",
+                lineHeight: 1.65,
+              }}
+            >
+              {item.a}
+            </p>
+          )}
+
+          {/* Stat */}
+          {item.stat && (
+            <div style={{ marginTop: "28px", display: "flex", alignItems: "baseline", gap: "10px" }}>
+              <span
+                style={{
+                  fontSize: "44px",
+                  fontWeight: 600,
+                  color: accent,
+                  letterSpacing: "-0.02em",
+                  lineHeight: 1,
+                }}
+              >
+                {item.stat}
+              </span>
+              <span
+                style={{
+                  fontSize: "11px",
+                  fontWeight: 500,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.15em",
+                  color: "#4A5B70",
+                }}
+              >
+                {item.statLabel}
+              </span>
+            </div>
+          )}
+        </div>
       </div>
     </motion.div>
   );
@@ -355,239 +452,373 @@ function GlassCard({
 // ─── SECTION ───────────────────────────────────────────────────────────────────
 
 function Section({ section }: { section: (typeof sections)[0] }) {
-  const { ref, visible } = useInView(0.05);
-  const color = accentColor(section.accent);
+  const { ref, visible } = useInView(0.04);
 
   return (
-    <section ref={ref} id={section.id} className="mb-28 scroll-mt-28">
+    <section
+      ref={ref}
+      id={section.id}
+      style={{ marginBottom: "120px", scrollMarginTop: "100px" }}
+    >
+      {/* Header */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 18 }}
         animate={visible ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="mb-10"
+        style={{ marginBottom: "40px", position: "relative" }}
       >
-        {/* Section label */}
-        <div className="flex items-center gap-4 mb-5">
+        {/* Section index + line */}
+        <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "12px" }}>
           <span
-            className="text-[11px] font-semibold tracking-[0.3em] uppercase"
-            style={{ color }}
+            style={{
+              fontSize: "11px",
+              fontWeight: 600,
+              letterSpacing: "0.28em",
+              textTransform: "uppercase",
+              color: section.accent,
+            }}
           >
-            {section.label}
+            {section.index}
           </span>
-          <div className="h-px flex-1" style={{ background: `linear-gradient(90deg, ${color}40, transparent)` }} />
+          <div
+            style={{
+              flex: 1,
+              height: "1px",
+              background: `linear-gradient(90deg, ${section.accent}35, transparent)`,
+            }}
+          />
         </div>
 
-        <h2
-          className="font-light"
-          style={{ fontSize: "clamp(32px, 5vw, 48px)", color: "#FFFFFF", lineHeight: 1.1 }}
-        >
-          {section.title}
-        </h2>
+        {/* Ghost + real title */}
+        <div style={{ position: "relative" }}>
+          <span
+            style={{
+              position: "absolute",
+              top: "-8px",
+              left: "-4px",
+              fontSize: "clamp(64px, 10vw, 110px)",
+              fontWeight: 700,
+              color: `${section.accent}06`,
+              lineHeight: 1,
+              letterSpacing: "-0.04em",
+              userSelect: "none",
+              pointerEvents: "none",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {section.title}
+          </span>
+          <h2
+            style={{
+              fontSize: "clamp(32px, 4.5vw, 44px)",
+              fontWeight: 500,
+              color: "#FFFFFF",
+              lineHeight: 1.1,
+              letterSpacing: "-0.02em",
+              position: "relative",
+            }}
+          >
+            {section.title}
+          </h2>
+        </div>
       </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+      {/* Cards grid */}
+      <div className="card-grid">
         {section.items.map((item, i) => (
-          <GlassCard key={item.n} item={item} index={i} accent={section.accent} />
+          <QACard key={item.n} item={item} index={i} accent={section.accent} />
         ))}
       </div>
     </section>
   );
 }
 
-// ─── NAV PILL ──────────────────────────────────────────────────────────────────
-
-function NavPill({ section, active }: { section: (typeof sections)[0]; active: boolean }) {
-  const color = accentColor(section.accent);
-  return (
-    <a
-      href={`#${section.id}`}
-      className="flex items-center gap-2.5 transition-all duration-200"
-    >
-      <span
-        className="rounded-full transition-all duration-300"
-        style={{
-          width: active ? 18 : 4,
-          height: 4,
-          background: active ? color : "rgba(255,255,255,0.15)",
-        }}
-      />
-    </a>
-  );
-}
-
 // ─── PAGE ───────────────────────────────────────────────────────────────────────
 
 export default function StrategyPage() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: containerRef });
+  const { scrollYProgress } = useScroll();
   const progressWidth = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
-  const [activeSection, setActiveSection] = useState(0);
+  const [activeSection, setActiveSection] = useState(-1);
   const [scrolled, setScrolled] = useState(false);
-  const lastYRef = useRef(0);
   const [headerHidden, setHeaderHidden] = useState(false);
+  const lastYRef = useRef(0);
 
   useEffect(() => {
     const fn = () => {
       const y = window.scrollY;
-      setScrolled(y > 20);
-      setHeaderHidden(y > 120 && y > lastYRef.current);
+      setScrolled(y > 30);
+      setHeaderHidden(y > 150 && y > lastYRef.current);
       lastYRef.current = y;
+      let found = -1;
       for (let i = sections.length - 1; i >= 0; i--) {
         const el = document.getElementById(sections[i].id);
-        if (el && el.getBoundingClientRect().top <= 160) {
-          setActiveSection(i);
+        if (el && el.getBoundingClientRect().top <= 140) {
+          found = i;
           break;
         }
       }
+      setActiveSection(found);
     };
     window.addEventListener("scroll", fn, { passive: true });
     return () => window.removeEventListener("scroll", fn);
   }, []);
 
   return (
-    <div ref={containerRef} style={{ background: "#00080D", minHeight: "100vh" }}>
-      {/* Progress */}
+    <div style={{ background: "#00080D", minHeight: "100vh", position: "relative" }}>
+      {/* Scroll progress bar */}
       <motion.div
-        className="fixed top-0 left-0 h-[2px] z-50 pointer-events-none"
         style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          height: "2px",
           width: progressWidth,
           background: "linear-gradient(90deg, #5D55F0, #18CC90)",
+          zIndex: 60,
+          pointerEvents: "none",
         }}
       />
 
       {/* Side nav */}
-      <nav className="fixed right-8 top-1/2 -translate-y-1/2 z-40 hidden xl:flex flex-col gap-4">
+      <nav
+        style={{
+          position: "fixed",
+          right: "32px",
+          top: "50%",
+          transform: "translateY(-50%)",
+          zIndex: 40,
+          display: "flex",
+          flexDirection: "column",
+          gap: "12px",
+        }}
+        className="hidden xl:flex"
+      >
         {sections.map((s, i) => (
-          <NavPill key={s.id} section={s} active={activeSection === i} />
+          <a
+            key={s.id}
+            href={`#${s.id}`}
+            title={s.title}
+            style={{ display: "flex", alignItems: "center", gap: "8px" }}
+          >
+            <span
+              style={{
+                display: "block",
+                height: "6px",
+                width: activeSection === i ? "22px" : "6px",
+                borderRadius: "3px",
+                background: activeSection === i ? s.accent : "rgba(255,255,255,0.18)",
+                transition: "all 0.3s ease",
+              }}
+            />
+          </a>
         ))}
       </nav>
 
       {/* Header */}
       <motion.header
         animate={{ y: headerHidden ? -80 : 0, opacity: headerHidden ? 0 : 1 }}
-        transition={{ duration: 0.25 }}
-        className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-8 md:px-14"
+        transition={{ duration: 0.25, ease: "easeInOut" }}
+        className="site-header"
         style={{
-          height: 72,
-          background: scrolled
-            ? "rgba(0,8,13,0.85)"
-            : "transparent",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 50,
+          height: "68px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "0 48px",
+          background: scrolled ? "rgba(0,8,13,0.88)" : "transparent",
           backdropFilter: scrolled ? "blur(20px)" : "none",
           WebkitBackdropFilter: scrolled ? "blur(20px)" : "none",
           borderBottom: scrolled ? "1px solid rgba(255,255,255,0.06)" : "1px solid transparent",
-          transition: "background 0.3s, border-color 0.3s, backdrop-filter 0.3s",
+          transition: "background 0.4s, border-color 0.4s",
         }}
       >
-        {/* Logo wordmark */}
-        <div className="flex items-center gap-2">
-          <span
-            className="text-base font-semibold tracking-tight"
-            style={{ color: "#FFFFFF" }}
-          >
+        {/* Logo */}
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <span style={{ fontSize: "16px", fontWeight: 600, color: "#FFFFFF", letterSpacing: "-0.01em" }}>
             binderr
           </span>
           <span
-            className="text-[10px] font-medium tracking-[0.2em] uppercase px-2 py-0.5 rounded-full ml-1"
             style={{
-              color: "#5D55F0",
-              background: "rgba(93,85,240,0.12)",
-              border: "1px solid rgba(93,85,240,0.2)",
+              fontSize: "10px",
+              fontWeight: 500,
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              color: PURPLE,
+              background: `${PURPLE}15`,
+              border: `1px solid ${PURPLE}25`,
+              padding: "3px 10px",
+              borderRadius: "100px",
             }}
           >
             Strategy
           </span>
         </div>
 
-        {/* Nav links */}
-        <div className="hidden md:flex items-center gap-8">
+        {/* Nav */}
+        <div
+          style={{ display: "flex", alignItems: "center", gap: "32px" }}
+          className="hidden md:flex"
+        >
           {sections.map((s) => (
             <a
               key={s.id}
               href={`#${s.id}`}
-              className="text-[13px] font-light transition-colors duration-200"
-              style={{ color: "rgba(127,146,173,0.7)" }}
+              style={{
+                fontSize: "13px",
+                fontWeight: 400,
+                color: "rgba(127,146,173,0.65)",
+                textDecoration: "none",
+                transition: "color 0.2s",
+              }}
               onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "#fff")}
-              onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "rgba(127,146,173,0.7)")}
+              onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "rgba(127,146,173,0.65)")}
             >
               {s.title}
             </a>
           ))}
         </div>
 
-        {/* CTA */}
+        {/* CTA button */}
         <a
           href="#purpose"
-          className="hidden md:inline-flex items-center gap-2 text-[13px] font-medium px-4 py-2 rounded-xl transition-all duration-200 hover:opacity-90"
+          className="hidden md:inline-flex"
           style={{
-            background: "linear-gradient(94deg, #5D55F0, #35318A)",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "8px",
+            fontSize: "13px",
+            fontWeight: 500,
             color: "#fff",
+            background: "linear-gradient(94deg, #5D55F0 3.64%, #35318A 148.92%)",
+            padding: "8px 18px",
+            borderRadius: "12px",
+            textDecoration: "none",
+            transition: "opacity 0.2s",
           }}
+          onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.opacity = "0.85")}
+          onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.opacity = "1")}
         >
-          View framework
+          View Framework
         </a>
       </motion.header>
 
       {/* ── HERO ── */}
       <section
-        className="relative flex flex-col items-center justify-center overflow-hidden"
-        style={{ minHeight: "100vh", paddingTop: 72 }}
+        style={{
+          position: "relative",
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          overflow: "hidden",
+          paddingTop: "68px",
+        }}
       >
-        {/* Background glow */}
+        {/* Background: top purple glow */}
         <div
-          className="absolute inset-0 pointer-events-none"
           style={{
-            background: `
-              radial-gradient(ellipse 60% 50% at 50% 0%, rgba(93,85,240,0.18) 0%, transparent 70%),
-              radial-gradient(ellipse 40% 30% at 80% 60%, rgba(24,204,144,0.08) 0%, transparent 60%)
-            `,
+            position: "absolute",
+            top: "-200px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "900px",
+            height: "900px",
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(93,85,240,0.2) 0%, transparent 70%)",
+            pointerEvents: "none",
+          }}
+        />
+        {/* Background: bottom-right teal glow */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: "-100px",
+            right: "-100px",
+            width: "600px",
+            height: "600px",
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(24,204,144,0.09) 0%, transparent 70%)",
+            pointerEvents: "none",
           }}
         />
 
-        {/* Subtle grid */}
+        {/* Grid overlay */}
         <div
-          className="absolute inset-0 pointer-events-none"
           style={{
+            position: "absolute",
+            inset: 0,
+            pointerEvents: "none",
             backgroundImage: `
-              linear-gradient(rgba(93,85,240,0.04) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(93,85,240,0.04) 1px, transparent 1px)
+              linear-gradient(rgba(93,85,240,0.05) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(93,85,240,0.05) 1px, transparent 1px)
             `,
-            backgroundSize: "80px 80px",
-            maskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 100%)",
+            backgroundSize: "72px 72px",
+            maskImage: "radial-gradient(ellipse 75% 75% at 50% 50%, black 30%, transparent 100%)",
+            WebkitMaskImage: "radial-gradient(ellipse 75% 75% at 50% 50%, black 30%, transparent 100%)",
           }}
         />
 
         <motion.div
-          className="relative z-10 text-center px-6 max-w-4xl w-full mx-auto"
+          style={{ position: "relative", zIndex: 10, textAlign: "center", padding: "0 24px", maxWidth: "860px", width: "100%" }}
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
         >
-          {/* Badge */}
+          {/* Eyebrow badge */}
           <motion.div
-            className="inline-flex items-center gap-2 mb-10 px-4 py-2 rounded-full"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15, duration: 0.5 }}
             style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
+              marginBottom: "44px",
+              padding: "8px 18px",
+              borderRadius: "100px",
               background: "rgba(93,85,240,0.1)",
-              border: "1px solid rgba(93,85,240,0.2)",
+              border: "1px solid rgba(93,85,240,0.22)",
             }}
           >
-            <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: "#18CC90" }} />
-            <span className="text-[11px] font-medium tracking-[0.2em] uppercase" style={{ color: "#7F92AD" }}>
+            <span
+              style={{
+                width: "6px",
+                height: "6px",
+                borderRadius: "50%",
+                background: TEAL,
+                flexShrink: 0,
+                animation: "pulse 2s infinite",
+              }}
+            />
+            <span
+              style={{
+                fontSize: "11px",
+                fontWeight: 500,
+                letterSpacing: "0.18em",
+                textTransform: "uppercase",
+                color: "#7F92AD",
+              }}
+            >
               Confidential · Strategy Framework 2026
             </span>
           </motion.div>
 
-          {/* Headline */}
+          {/* Main headline */}
           <h1
-            className="font-light tracking-tight mb-6"
             style={{
-              fontSize: "clamp(48px, 9vw, 88px)",
-              lineHeight: 1.0,
+              fontSize: "clamp(50px, 9vw, 88px)",
+              fontWeight: 500,
+              lineHeight: 1.05,
+              letterSpacing: "-0.025em",
               color: "#FFFFFF",
-              letterSpacing: "-0.02em",
+              marginBottom: "28px",
             }}
           >
             Connecting the
@@ -604,130 +835,235 @@ export default function StrategyPage() {
             </span>
           </h1>
 
+          {/* Subheadline */}
           <p
-            className="text-lg font-light max-w-xl mx-auto mb-14"
-            style={{ color: "#7F92AD", lineHeight: 1.6 }}
+            style={{
+              fontSize: "18px",
+              fontWeight: 400,
+              color: "#7F92AD",
+              lineHeight: 1.65,
+              maxWidth: "520px",
+              margin: "0 auto 56px",
+            }}
           >
-            We build trusted infrastructure so businesses can expand anywhere — 21 strategic answers that define how we get there.
+            We build trusted infrastructure so businesses can expand anywhere.
+            21 strategic answers that define how we get there.
           </p>
 
-          {/* Stats */}
-          <div className="flex flex-wrap justify-center gap-10 mb-14">
+          {/* Stats row */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              flexWrap: "wrap",
+              gap: "48px",
+              marginBottom: "52px",
+            }}
+          >
             {[
-              { val: "70,000+", label: "Verified Users" },
-              { val: "21", label: "Strategic Pillars" },
-              { val: "6", label: "Core Sections" },
+              { val: "70,000+", label: "Verified Users", color: PURPLE },
+              { val: "21", label: "Strategic Answers", color: TEAL },
+              { val: "6", label: "Core Pillars", color: PURPLE },
             ].map((s, i) => (
               <motion.div
                 key={s.label}
-                className="text-center"
-                initial={{ opacity: 0, y: 12 }}
+                style={{ textAlign: "center" }}
+                initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.35 + i * 0.1 }}
+                transition={{ delay: 0.3 + i * 0.1, duration: 0.5 }}
               >
                 <div
-                  className="text-2xl font-semibold mb-1"
-                  style={{ color: i % 2 === 0 ? "#5D55F0" : "#18CC90" }}
+                  style={{
+                    fontSize: "28px",
+                    fontWeight: 600,
+                    color: s.color,
+                    letterSpacing: "-0.01em",
+                    marginBottom: "4px",
+                  }}
                 >
                   {s.val}
                 </div>
-                <div className="text-[11px] uppercase tracking-widest" style={{ color: "rgba(127,146,173,0.5)" }}>
+                <div
+                  style={{
+                    fontSize: "11px",
+                    fontWeight: 500,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.16em",
+                    color: "rgba(127,146,173,0.45)",
+                  }}
+                >
                   {s.label}
                 </div>
               </motion.div>
             ))}
           </div>
 
-          {/* CTAs */}
-          <div className="flex flex-wrap justify-center gap-3">
+          {/* CTA */}
+          <motion.div
+            style={{ display: "flex", justifyContent: "center", gap: "12px", flexWrap: "wrap" }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.5 }}
+          >
             <motion.a
               href="#purpose"
-              className="inline-flex items-center gap-2.5 px-6 py-3 rounded-xl text-sm font-medium transition-all duration-200"
               style={{
-                background: "linear-gradient(94deg, #5D55F0, #35318A)",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "10px",
+                padding: "14px 28px",
+                borderRadius: "12px",
+                background: "linear-gradient(94deg, #5D55F0 3.64%, #35318A 148.92%)",
                 color: "#fff",
-                boxShadow: "0 0 40px rgba(93,85,240,0.3)",
+                fontSize: "15px",
+                fontWeight: 500,
+                textDecoration: "none",
+                boxShadow: "0 0 48px rgba(93,85,240,0.35)",
               }}
-              whileHover={{ scale: 1.03, boxShadow: "0 0 60px rgba(93,85,240,0.45)" }}
+              whileHover={{ scale: 1.03, boxShadow: "0 0 64px rgba(93,85,240,0.5)" }}
               whileTap={{ scale: 0.97 }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.65 }}
             >
-              Explore framework
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-                <path d="M1 7h12M7 1l6 6-6 6" />
+              Explore Framework
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+                <path d="M3 8h10M8 3l5 5-5 5" />
               </svg>
             </motion.a>
-            <motion.a
-              href="https://binderr.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2.5 px-6 py-3 rounded-xl text-sm font-medium transition-all duration-200"
-              style={{
-                background: "rgba(255,255,255,0.04)",
-                color: "#7F92AD",
-                border: "1px solid rgba(255,255,255,0.08)",
-              }}
-              whileHover={{ background: "rgba(255,255,255,0.07)", color: "#fff" }}
-              whileTap={{ scale: 0.97 }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.72 }}
-            >
-              Visit binderr.com
-            </motion.a>
-          </div>
+          </motion.div>
         </motion.div>
 
-        {/* Scroll indicator */}
+        {/* Scroll cue */}
         <motion.div
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1"
+          style={{
+            position: "absolute",
+            bottom: "36px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "6px",
+          }}
           animate={{ y: [0, 8, 0] }}
           transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
         >
-          <span className="text-[10px] tracking-[0.2em] uppercase" style={{ color: "rgba(127,146,173,0.35)" }}>Scroll</span>
-          <div className="w-px h-8" style={{ background: "linear-gradient(180deg, rgba(93,85,240,0.5), transparent)" }} />
+          <span
+            style={{
+              fontSize: "10px",
+              fontWeight: 500,
+              letterSpacing: "0.22em",
+              textTransform: "uppercase",
+              color: "rgba(127,146,173,0.3)",
+            }}
+          >
+            Scroll
+          </span>
+          <div
+            style={{
+              width: "1px",
+              height: "32px",
+              background: "linear-gradient(180deg, rgba(93,85,240,0.6), transparent)",
+            }}
+          />
         </motion.div>
       </section>
 
       {/* ── CONTENT ── */}
-      <main className="max-w-5xl mx-auto px-6 md:px-10 pt-12 pb-36">
+      <main
+        className="main-content"
+        style={{
+          maxWidth: "1024px",
+          margin: "0 auto",
+          padding: "0 40px 120px",
+          position: "relative",
+        }}
+      >
+        {/* Decorative background orbs within content */}
+        <div
+          style={{
+            position: "absolute",
+            top: "10%",
+            right: "-200px",
+            width: "500px",
+            height: "500px",
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(93,85,240,0.07) 0%, transparent 70%)",
+            pointerEvents: "none",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            top: "45%",
+            left: "-200px",
+            width: "500px",
+            height: "500px",
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(24,204,144,0.06) 0%, transparent 70%)",
+            pointerEvents: "none",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            top: "75%",
+            right: "-150px",
+            width: "400px",
+            height: "400px",
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(93,85,240,0.06) 0%, transparent 70%)",
+            pointerEvents: "none",
+          }}
+        />
+
         {sections.map((s) => (
           <Section key={s.id} section={s} />
         ))}
       </main>
 
-      {/* ── CLOSING BANNER ── */}
+      {/* ── CLOSING STATEMENT ── */}
       <div
-        className="relative py-28 overflow-hidden"
         style={{
-          background: "linear-gradient(135deg, rgba(93,85,240,0.08) 0%, rgba(24,204,144,0.04) 100%)",
+          position: "relative",
+          padding: "112px 24px",
+          overflow: "hidden",
           borderTop: "1px solid rgba(93,85,240,0.15)",
           borderBottom: "1px solid rgba(93,85,240,0.15)",
         }}
       >
         <div
-          className="absolute inset-0 pointer-events-none"
           style={{
-            background: "radial-gradient(ellipse 60% 80% at 50% 50%, rgba(93,85,240,0.1) 0%, transparent 70%)",
+            position: "absolute",
+            inset: 0,
+            background: "radial-gradient(ellipse 70% 80% at 50% 50%, rgba(93,85,240,0.12) 0%, transparent 70%)",
+            pointerEvents: "none",
           }}
         />
-        <div className="relative max-w-3xl mx-auto px-8 text-center">
+        <div style={{ position: "relative", maxWidth: "760px", margin: "0 auto", textAlign: "center" }}>
           <p
-            className="text-[11px] font-semibold tracking-[0.3em] uppercase mb-6"
-            style={{ color: "#18CC90" }}
+            style={{
+              fontSize: "11px",
+              fontWeight: 600,
+              letterSpacing: "0.3em",
+              textTransform: "uppercase",
+              color: TEAL,
+              marginBottom: "24px",
+            }}
           >
-            The thesis
+            The Thesis
           </p>
           <p
-            className="font-light"
-            style={{ fontSize: "clamp(24px, 4vw, 40px)", color: "#FFFFFF", lineHeight: 1.3, letterSpacing: "-0.01em" }}
+            style={{
+              fontSize: "clamp(26px, 4vw, 42px)",
+              fontWeight: 500,
+              color: "#FFFFFF",
+              lineHeight: 1.25,
+              letterSpacing: "-0.02em",
+            }}
           >
             Those who join early gain{" "}
             <span
               style={{
-                backgroundImage: "linear-gradient(94deg, #5D55F0, #18CC90)",
+                backgroundImage: `linear-gradient(94deg, ${PURPLE} 0%, ${TEAL} 100%)`,
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
@@ -741,11 +1077,41 @@ export default function StrategyPage() {
       </div>
 
       {/* ── FOOTER ── */}
-      <footer className="py-12 text-center" style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}>
-        <p className="text-[11px] tracking-widest uppercase" style={{ color: "rgba(127,146,173,0.25)" }}>
-          Binderr © 2026 · Confidential · Do Not Distribute
-        </p>
+      <footer
+        style={{
+          padding: "40px 48px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          borderTop: "1px solid rgba(255,255,255,0.04)",
+          flexWrap: "wrap",
+          gap: "16px",
+        }}
+      >
+        <span style={{ fontSize: "14px", fontWeight: 600, color: "rgba(255,255,255,0.15)" }}>binderr</span>
+        <span
+          style={{
+            fontSize: "11px",
+            fontWeight: 400,
+            color: "rgba(127,146,173,0.2)",
+            letterSpacing: "0.12em",
+            textTransform: "uppercase",
+          }}
+        >
+          © 2026 · Confidential · Do Not Distribute
+        </span>
       </footer>
+
+      <style>{`
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.4; }
+        }
+        @media (max-width: 768px) {
+          main { padding: 0 20px 80px !important; }
+          header { padding: 0 20px !important; }
+        }
+      `}</style>
     </div>
   );
 }

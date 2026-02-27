@@ -1,39 +1,49 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
 @import "tailwindcss";
 
-:root {
-  --bg:           #00080D;
-  --bg-card:      rgba(26, 36, 48, 0.15);
-  --bg-card-dark: rgba(0, 14, 22, 0.5);
-  --purple:       #5D55F0;
-  --purple-dark:  #35318A;
-  --purple-dim:   rgba(93, 85, 240, 0.15);
-  --purple-glow:  rgba(93, 85, 240, 0.3);
-  --teal:         #18CC90;
-  --teal-dim:     rgba(24, 204, 144, 0.12);
-  --text-primary: #FFFFFF;
-  --text-secondary: #7F92AD;
-  --text-muted:   rgba(127, 146, 173, 0.45);
-  --border:       rgba(255, 255, 255, 0.07);
-  --border-purple: rgba(103, 116, 244, 0.25);
-}
-
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
 html { scroll-behavior: smooth; }
 
 body {
-  background: var(--bg);
-  color: var(--text-primary);
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-weight: 400;
+  background: #00080D;
+  color: #FFFFFF;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
-::selection { background: var(--purple); color: #fff; }
+::selection { background: #5D55F0; color: #fff; }
 
 ::-webkit-scrollbar { width: 3px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: rgba(93,85,240,0.4); border-radius: 2px; }
+::-webkit-scrollbar-track { background: #00080D; }
+::-webkit-scrollbar-thumb { background: rgba(93,85,240,0.45); border-radius: 2px; }
+
+/* Card grid responsive */
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@media (min-width: 768px) {
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.card-wide {
+  grid-column: 1 / -1;
+}
+
+/* Responsive padding */
+@media (max-width: 767px) {
+  .main-content {
+    padding: 0 20px 80px !important;
+  }
+  .site-header {
+    padding: 0 20px !important;
+  }
+  .footer-inner {
+    padding: 32px 20px !important;
+  }
+}
