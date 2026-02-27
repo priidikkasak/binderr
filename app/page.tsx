@@ -8,22 +8,22 @@ import { motion, useScroll, useTransform } from "framer-motion";
 const sections = [
   {
     id: "purpose",
-    label: "01 — Purpose",
+    label: "01",
     title: "Purpose",
-    color: "#c9a84c",
+    accent: "purple",
     items: [
       {
-        n: "1",
+        n: "01",
         q: "Our one sentence mission",
         a: "To become the global infrastructure layer connecting businesses with trusted financial, legal, and compliance providers through a single unified platform.",
       },
       {
-        n: "2",
+        n: "02",
         q: "Why the world needs us",
         a: "Starting and operating a business globally is fragmented, slow, and trust-constrained — Binderr removes friction, reduces risk, and compresses weeks of operational setup into a single streamlined experience.",
       },
       {
-        n: "3",
+        n: "03",
         q: "What would break if we disappeared",
         a: "Service providers would lose access to a scalable, qualified global demand channel, and businesses would revert to inefficient, opaque, and high-risk provider discovery and onboarding processes.",
       },
@@ -31,35 +31,35 @@ const sections = [
   },
   {
     id: "advantage",
-    label: "02 — Unique Advantage",
+    label: "02",
     title: "Unique Advantage",
-    color: "#4f7cff",
+    accent: "teal",
     items: [
       {
-        n: "4",
-        q: "The \"secret\" we believe that others don't",
+        n: "04",
+        q: "The secret we believe that others don't",
         a: "The future is not individual providers competing for clients — it's infrastructure platforms owning distribution, trust, and onboarding at scale.",
       },
       {
-        n: "5",
+        n: "05",
         q: "What makes us hard to copy",
         a: "The combination of compliance infrastructure, verified user base, provider network, and early geographic expansion creates compounding network effects.",
       },
       {
-        n: "6",
+        n: "06",
         q: "Core moat",
         a: "Network + compliance infrastructure + execution speed.",
         highlight: true,
       },
       {
-        n: "7",
+        n: "07",
         q: "Where we're already winning disproportionately",
-        a: "Early provider onboarding, verified compliance user base (70,000+), and qualified inbound demand generation.",
+        a: "Early provider onboarding, verified compliance user base, and qualified inbound demand generation.",
         stat: "70,000+",
-        statLabel: "verified users",
+        statLabel: "Verified users",
       },
       {
-        n: "8",
+        n: "08",
         q: "10× better than the status quo at",
         a: "Reducing time, friction, and uncertainty in finding and onboarding trusted business service providers globally.",
       },
@@ -67,12 +67,12 @@ const sections = [
   },
   {
     id: "market",
-    label: "03 — The Market",
+    label: "03",
     title: "The Market",
-    color: "#7c4fff",
+    accent: "purple",
     items: [
       {
-        n: "9",
+        n: "09",
         q: "Who our dream customer is",
         a: "Corporate service providers, compliance firms, financial institutions, and globally operating entrepreneurs who need fast, trusted infrastructure.",
       },
@@ -83,28 +83,30 @@ const sections = [
       },
       {
         n: "11",
-        q: "Market we dominate first (beachhead)",
+        q: "Market we dominate first",
         a: "Corporate service providers and AML/KYC-focused firms in high-growth jurisdictions, starting with the Baltics and expanding globally.",
       },
     ],
   },
   {
     id: "choices",
-    label: "04 — Strategic Choices",
+    label: "04",
     title: "Strategic Choices",
-    color: "#ff4f7c",
+    accent: "teal",
     items: [
       {
         n: "12",
-        q: "What we will ALWAYS do",
+        q: "What we will always do",
         a: "Prioritize network growth, execution speed, and real provider-client matching that generates measurable economic value.",
-        cardType: "always",
+        badge: "Always",
+        badgeColor: "teal",
       },
       {
         n: "13",
-        q: "What we will NEVER do",
+        q: "What we will never do",
         a: "Become a generic directory or sacrifice trust and quality for short-term growth.",
-        cardType: "never",
+        badge: "Never",
+        badgeColor: "red",
       },
       {
         n: "14",
@@ -126,9 +128,9 @@ const sections = [
   },
   {
     id: "execution",
-    label: "05 — Execution",
+    label: "05",
     title: "Execution System",
-    color: "#4fc9a8",
+    accent: "purple",
     items: [
       {
         n: "17",
@@ -159,9 +161,9 @@ const sections = [
   },
   {
     id: "story",
-    label: "06 — Strategic Story",
+    label: "06",
     title: "Strategic Story",
-    color: "#c9a84c",
+    accent: "teal",
     items: [
       {
         n: "20",
@@ -170,7 +172,7 @@ const sections = [
       },
       {
         n: "21",
-        q: "Sticky phrase: We win because",
+        q: "We win because",
         a: "We control trust, distribution, and infrastructure before the rest of the market realizes the shift.",
         highlight: true,
         big: true,
@@ -185,24 +187,23 @@ type SectionItem = {
   a: string;
   highlight?: boolean;
   big?: boolean;
-  cardType?: string;
+  badge?: string;
+  badgeColor?: string;
   stat?: string;
   statLabel?: string;
   bullets?: string[];
 };
 
-// ─── HOOKS ─────────────────────────────────────────────────────────────────────
+// ─── HELPERS ───────────────────────────────────────────────────────────────────
 
-function useInView(threshold = 0.15) {
+function useInView(threshold = 0.1) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const obs = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting) setVisible(true);
-      },
+      ([e]) => { if (e.isIntersecting) setVisible(true); },
       { threshold }
     );
     obs.observe(el);
@@ -211,122 +212,97 @@ function useInView(threshold = 0.15) {
   return { ref, visible };
 }
 
-// ─── COMPONENTS ────────────────────────────────────────────────────────────────
+const PURPLE = "#5D55F0";
+const TEAL   = "#18CC90";
+const accentColor = (a: string) => (a === "teal" ? TEAL : PURPLE);
 
-function SectionDivider({ label, color }: { label: string; color: string }) {
-  return (
-    <div className="flex items-center gap-4 mb-12">
-      <div
-        className="h-px flex-1"
-        style={{
-          background: `linear-gradient(90deg, ${color}50, transparent)`,
-        }}
-      />
-      <span
-        className="text-xs font-semibold tracking-[0.2em] uppercase px-4 py-1.5 rounded-full border"
-        style={{
-          color,
-          borderColor: `${color}30`,
-          background: `${color}10`,
-        }}
-      >
-        {label}
-      </span>
-      <div
-        className="h-px flex-1"
-        style={{
-          background: `linear-gradient(270deg, ${color}50, transparent)`,
-        }}
-      />
-    </div>
-  );
-}
+// ─── GLASS CARD ────────────────────────────────────────────────────────────────
 
-function QACard({
+function GlassCard({
   item,
   index,
-  color,
+  accent,
 }: {
   item: SectionItem;
   index: number;
-  color: string;
+  accent: string;
 }) {
   const { ref, visible } = useInView();
-
-  const isFullWidth = item.big || item.highlight;
+  const color = accentColor(accent);
+  const isWide = item.big || item.highlight;
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 28 }}
+      initial={{ opacity: 0, y: 24 }}
       animate={visible ? { opacity: 1, y: 0 } : {}}
-      transition={{
-        duration: 0.55,
-        delay: index * 0.07,
-        ease: [0.16, 1, 0.3, 1],
-      }}
-      className={`relative group rounded-2xl border overflow-hidden transition-colors duration-300 ${
-        isFullWidth ? "md:col-span-2" : ""
-      }`}
+      transition={{ duration: 0.5, delay: index * 0.07, ease: [0.16, 1, 0.3, 1] }}
+      className={`relative group rounded-3xl overflow-hidden ${isWide ? "md:col-span-2" : ""}`}
       style={{
         background: item.highlight
-          ? `linear-gradient(135deg, ${color}14, ${color}04)`
-          : "#0e0e15",
-        borderColor: item.highlight ? `${color}30` : "rgba(255,255,255,0.06)",
-      }}
-      onMouseEnter={(e) => {
-        (e.currentTarget as HTMLElement).style.borderColor = item.highlight
-          ? `${color}50`
-          : "rgba(255,255,255,0.12)";
-      }}
-      onMouseLeave={(e) => {
-        (e.currentTarget as HTMLElement).style.borderColor = item.highlight
-          ? `${color}30`
-          : "rgba(255,255,255,0.06)";
+          ? `linear-gradient(135deg, ${color}18 0%, rgba(0,14,22,0.6) 100%)`
+          : "rgba(26, 36, 48, 0.15)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
+        border: `0.5px solid ${item.highlight ? `${color}40` : "rgba(255,255,255,0.07)"}`,
+        boxShadow: item.highlight
+          ? `0 0 60px ${color}15, inset 0 0 60px ${color}05`
+          : "none",
       }}
     >
-      {/* Hover glow */}
+      {/* Hover gradient */}
       <div
-        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-3xl"
         style={{
-          background: `radial-gradient(400px circle at 10% 10%, ${color}08, transparent 60%)`,
+          background: `radial-gradient(500px circle at 0% 0%, ${color}10, transparent 60%)`,
         }}
       />
 
-      {/* Always / Never badge */}
-      {item.cardType && (
-        <div
-          className="absolute top-5 right-5 text-[10px] font-bold tracking-[0.2em] uppercase px-3 py-1 rounded-full"
-          style={{
-            color: item.cardType === "always" ? "#4fc9a8" : "#ff4f7c",
-            background:
-              item.cardType === "always"
-                ? "rgba(79,201,168,0.12)"
-                : "rgba(255,79,124,0.12)",
-            border: `1px solid ${
-              item.cardType === "always"
-                ? "rgba(79,201,168,0.25)"
-                : "rgba(255,79,124,0.25)"
-            }`,
-          }}
-        >
-          {item.cardType === "always" ? "Always" : "Never"}
-        </div>
-      )}
+      {/* Gradient top edge */}
+      <div
+        className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        style={{
+          background: `linear-gradient(90deg, transparent, ${color}60, transparent)`,
+        }}
+      />
 
-      <div className="p-7 md:p-9">
+      <div className={`relative p-8 ${isWide ? "md:p-10" : ""}`}>
+        {/* Badge */}
+        {item.badge && (
+          <span
+            className="absolute top-6 right-6 text-[10px] font-semibold tracking-[0.2em] uppercase px-3 py-1 rounded-full"
+            style={{
+              color: item.badgeColor === "teal" ? TEAL : item.badgeColor === "red" ? "#E04360" : color,
+              background: item.badgeColor === "teal"
+                ? "rgba(24,204,144,0.1)"
+                : item.badgeColor === "red"
+                ? "rgba(224,67,96,0.1)"
+                : `${color}15`,
+              border: `1px solid ${
+                item.badgeColor === "teal"
+                  ? "rgba(24,204,144,0.2)"
+                  : item.badgeColor === "red"
+                  ? "rgba(224,67,96,0.2)"
+                  : `${color}30`
+              }`,
+            }}
+          >
+            {item.badge}
+          </span>
+        )}
+
         {/* Number */}
-        <div
-          className="text-[11px] font-bold tracking-[0.28em] mb-5 uppercase"
+        <p
+          className="text-[11px] font-semibold tracking-[0.25em] uppercase mb-5"
           style={{ color }}
         >
-          {String(item.n).padStart(2, "0")}
-        </div>
+          {item.n}
+        </p>
 
         {/* Question */}
         <p
-          className="text-[13px] font-medium tracking-wide mb-4 leading-relaxed"
-          style={{ color: "#6b6b80" }}
+          className="text-sm font-medium mb-4 leading-relaxed"
+          style={{ color: "#7F92AD" }}
         >
           {item.q}
         </p>
@@ -334,15 +310,15 @@ function QACard({
         {/* Answer */}
         {item.big ? (
           <p
-            className="text-2xl md:text-3xl lg:text-4xl font-bold leading-snug"
-            style={{ color: "#f0ede8" }}
+            className="text-2xl md:text-3xl font-light leading-snug"
+            style={{ color: "#FFFFFF", lineHeight: 1.3 }}
           >
             {item.a}
           </p>
         ) : item.bullets ? (
-          <ul className="space-y-2.5 mt-1">
+          <ul className="space-y-3 mt-1">
             {item.bullets.map((b, i) => (
-              <li key={i} className="flex items-start gap-3 text-sm text-gray-300 leading-relaxed">
+              <li key={i} className="flex items-start gap-3 text-[15px] leading-relaxed" style={{ color: "#CBD5E1" }}>
                 <span
                   className="mt-2 w-1.5 h-1.5 rounded-full flex-shrink-0"
                   style={{ background: color }}
@@ -352,115 +328,89 @@ function QACard({
             ))}
           </ul>
         ) : (
-          <p className="text-sm md:text-[15px] leading-relaxed text-gray-300">
+          <p className="text-[15px] leading-relaxed" style={{ color: "#CBD5E1" }}>
             {item.a}
           </p>
         )}
 
         {/* Stat */}
         {item.stat && (
-          <div className="mt-6 flex items-baseline gap-2">
+          <div className="mt-6 flex items-baseline gap-2.5">
             <span
-              className="text-4xl font-black tracking-tight"
+              className="text-4xl font-semibold tracking-tight"
               style={{ color }}
             >
               {item.stat}
             </span>
-            <span
-              className="text-[11px] uppercase tracking-[0.15em]"
-              style={{ color: "#4d4d60" }}
-            >
+            <span className="text-xs uppercase tracking-widest" style={{ color: "#7F92AD" }}>
               {item.statLabel}
             </span>
           </div>
         )}
       </div>
-
-      {/* Bottom glow line */}
-      <div
-        className="h-[2px] w-0 group-hover:w-full transition-all duration-700"
-        style={{
-          background: `linear-gradient(90deg, ${color}, transparent)`,
-        }}
-      />
     </motion.div>
   );
 }
 
-function Section({
-  section,
-}: {
-  section: (typeof sections)[0];
-}) {
+// ─── SECTION ───────────────────────────────────────────────────────────────────
+
+function Section({ section }: { section: (typeof sections)[0] }) {
   const { ref, visible } = useInView(0.05);
+  const color = accentColor(section.accent);
 
   return (
-    <section ref={ref} id={section.id} className="mb-28 md:mb-36 scroll-mt-28">
+    <section ref={ref} id={section.id} className="mb-28 scroll-mt-28">
       <motion.div
-        initial={{ opacity: 0, x: -20 }}
-        animate={visible ? { opacity: 1, x: 0 } : {}}
+        initial={{ opacity: 0, y: 20 }}
+        animate={visible ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        className="mb-10"
       >
-        <SectionDivider label={section.label} color={section.color} />
-
-        {/* Ghost heading */}
-        <div className="relative mb-12 overflow-hidden">
+        {/* Section label */}
+        <div className="flex items-center gap-4 mb-5">
           <span
-            className="absolute -top-3 left-0 font-black leading-none select-none pointer-events-none"
-            style={{
-              fontSize: "clamp(72px, 12vw, 140px)",
-              color: `${section.color}05`,
-              letterSpacing: "-0.04em",
-              whiteSpace: "nowrap",
-            }}
+            className="text-[11px] font-semibold tracking-[0.3em] uppercase"
+            style={{ color }}
           >
-            {section.title}
+            {section.label}
           </span>
-          <h2
-            className="relative text-3xl md:text-4xl font-bold pt-3"
-            style={{ color: "#f0ede8" }}
-          >
-            {section.title}
-          </h2>
+          <div className="h-px flex-1" style={{ background: `linear-gradient(90deg, ${color}40, transparent)` }} />
         </div>
+
+        <h2
+          className="font-light"
+          style={{ fontSize: "clamp(32px, 5vw, 48px)", color: "#FFFFFF", lineHeight: 1.1 }}
+        >
+          {section.title}
+        </h2>
       </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {section.items.map((item, i) => (
-          <QACard key={item.n} item={item} index={i} color={section.color} />
+          <GlassCard key={item.n} item={item} index={i} accent={section.accent} />
         ))}
       </div>
     </section>
   );
 }
 
-function NavDot({
-  section,
-  active,
-}: {
-  section: (typeof sections)[0];
-  active: boolean;
-}) {
+// ─── NAV PILL ──────────────────────────────────────────────────────────────────
+
+function NavPill({ section, active }: { section: (typeof sections)[0]; active: boolean }) {
+  const color = accentColor(section.accent);
   return (
     <a
       href={`#${section.id}`}
-      className="group flex items-center gap-3"
-      title={section.title}
+      className="flex items-center gap-2.5 transition-all duration-200"
     >
       <span
-        className="block rounded-full transition-all duration-300"
+        className="rounded-full transition-all duration-300"
         style={{
-          width: active ? 20 : 5,
-          height: 5,
-          background: active ? section.color : "#2a2a3a",
+          width: active ? 18 : 4,
+          height: 4,
+          background: active ? color : "rgba(255,255,255,0.15)",
         }}
       />
-      <span
-        className="text-[10px] font-semibold tracking-[0.2em] uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap"
-        style={{ color: section.color }}
-      >
-        {section.title}
-      </span>
     </a>
   );
 }
@@ -473,287 +423,311 @@ export default function StrategyPage() {
   const progressWidth = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   const [activeSection, setActiveSection] = useState(0);
-  const [headerHidden, setHeaderHidden] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const lastYRef = useRef(0);
+  const [headerHidden, setHeaderHidden] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
+    const fn = () => {
       const y = window.scrollY;
-      setHeaderHidden(y > 100 && y > lastYRef.current);
+      setScrolled(y > 20);
+      setHeaderHidden(y > 120 && y > lastYRef.current);
       lastYRef.current = y;
-
       for (let i = sections.length - 1; i >= 0; i--) {
         const el = document.getElementById(sections[i].id);
-        if (el && el.getBoundingClientRect().top <= 180) {
+        if (el && el.getBoundingClientRect().top <= 160) {
           setActiveSection(i);
           break;
         }
       }
     };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", fn, { passive: true });
+    return () => window.removeEventListener("scroll", fn);
   }, []);
 
   return (
-    <div ref={containerRef} style={{ background: "#06060a", minHeight: "100vh" }}>
-      {/* Progress bar */}
+    <div ref={containerRef} style={{ background: "#00080D", minHeight: "100vh" }}>
+      {/* Progress */}
       <motion.div
         className="fixed top-0 left-0 h-[2px] z-50 pointer-events-none"
         style={{
           width: progressWidth,
-          background:
-            "linear-gradient(90deg, #c9a84c 0%, #4f7cff 50%, #c9a84c 100%)",
+          background: "linear-gradient(90deg, #5D55F0, #18CC90)",
         }}
       />
 
-      {/* Side nav dots */}
-      <nav className="fixed right-8 top-1/2 -translate-y-1/2 z-40 hidden xl:flex flex-col gap-5">
+      {/* Side nav */}
+      <nav className="fixed right-8 top-1/2 -translate-y-1/2 z-40 hidden xl:flex flex-col gap-4">
         {sections.map((s, i) => (
-          <NavDot key={s.id} section={s} active={activeSection === i} />
+          <NavPill key={s.id} section={s} active={activeSection === i} />
         ))}
       </nav>
 
       {/* Header */}
       <motion.header
-        className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-8 md:px-14 py-5"
         animate={{ y: headerHidden ? -80 : 0, opacity: headerHidden ? 0 : 1 }}
-        transition={{ duration: 0.28 }}
+        transition={{ duration: 0.25 }}
+        className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-8 md:px-14"
         style={{
-          background:
-            "linear-gradient(180deg, rgba(6,6,10,0.96) 0%, rgba(6,6,10,0) 100%)",
+          height: 72,
+          background: scrolled
+            ? "rgba(0,8,13,0.85)"
+            : "transparent",
+          backdropFilter: scrolled ? "blur(20px)" : "none",
+          WebkitBackdropFilter: scrolled ? "blur(20px)" : "none",
+          borderBottom: scrolled ? "1px solid rgba(255,255,255,0.06)" : "1px solid transparent",
+          transition: "background 0.3s, border-color 0.3s, backdrop-filter 0.3s",
         }}
       >
-        <div className="flex items-center gap-3">
+        {/* Logo wordmark */}
+        <div className="flex items-center gap-2">
           <span
-            className="text-sm font-extrabold tracking-[0.22em] uppercase"
-            style={{ color: "#c9a84c" }}
+            className="text-base font-semibold tracking-tight"
+            style={{ color: "#FFFFFF" }}
           >
-            Binderr
+            binderr
           </span>
-          <span style={{ color: "#222230", fontSize: 18 }}>×</span>
           <span
-            className="text-[11px] tracking-[0.2em] uppercase font-medium"
-            style={{ color: "#3d3d50" }}
+            className="text-[10px] font-medium tracking-[0.2em] uppercase px-2 py-0.5 rounded-full ml-1"
+            style={{
+              color: "#5D55F0",
+              background: "rgba(93,85,240,0.12)",
+              border: "1px solid rgba(93,85,240,0.2)",
+            }}
           >
-            Strategy 2026
+            Strategy
           </span>
         </div>
-        <div className="hidden md:flex items-center gap-7">
+
+        {/* Nav links */}
+        <div className="hidden md:flex items-center gap-8">
           {sections.map((s) => (
             <a
               key={s.id}
               href={`#${s.id}`}
-              className="text-[10px] font-semibold tracking-[0.2em] uppercase transition-colors duration-200"
-              style={{ color: "#3d3d50" }}
-              onMouseEnter={(e) => {
-                (e.target as HTMLElement).style.color = s.color;
-              }}
-              onMouseLeave={(e) => {
-                (e.target as HTMLElement).style.color = "#3d3d50";
-              }}
+              className="text-[13px] font-light transition-colors duration-200"
+              style={{ color: "rgba(127,146,173,0.7)" }}
+              onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "#fff")}
+              onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "rgba(127,146,173,0.7)")}
             >
               {s.title}
             </a>
           ))}
         </div>
+
+        {/* CTA */}
+        <a
+          href="#purpose"
+          className="hidden md:inline-flex items-center gap-2 text-[13px] font-medium px-4 py-2 rounded-xl transition-all duration-200 hover:opacity-90"
+          style={{
+            background: "linear-gradient(94deg, #5D55F0, #35318A)",
+            color: "#fff",
+          }}
+        >
+          View framework
+        </a>
       </motion.header>
 
       {/* ── HERO ── */}
       <section
-        className="relative min-h-screen flex flex-col items-center justify-center px-6 overflow-hidden"
-        style={{ paddingTop: 80 }}
+        className="relative flex flex-col items-center justify-center overflow-hidden"
+        style={{ minHeight: "100vh", paddingTop: 72 }}
       >
-        {/* Grid bg */}
+        {/* Background glow */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: `
+              radial-gradient(ellipse 60% 50% at 50% 0%, rgba(93,85,240,0.18) 0%, transparent 70%),
+              radial-gradient(ellipse 40% 30% at 80% 60%, rgba(24,204,144,0.08) 0%, transparent 60%)
+            `,
+          }}
+        />
+
+        {/* Subtle grid */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
             backgroundImage: `
-              linear-gradient(rgba(201,168,76,0.025) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(201,168,76,0.025) 1px, transparent 1px)
+              linear-gradient(rgba(93,85,240,0.04) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(93,85,240,0.04) 1px, transparent 1px)
             `,
-            backgroundSize: "64px 64px",
-          }}
-        />
-        {/* Radial glow */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse 80% 60% at 50% 40%, rgba(201,168,76,0.06) 0%, transparent 70%)",
+            backgroundSize: "80px 80px",
+            maskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 100%)",
           }}
         />
 
         <motion.div
-          className="relative z-10 text-center max-w-4xl w-full mx-auto"
-          initial={{ opacity: 0, y: 52 }}
+          className="relative z-10 text-center px-6 max-w-4xl w-full mx-auto"
+          initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
         >
           {/* Badge */}
           <motion.div
-            className="inline-flex items-center gap-2.5 mb-10 px-5 py-2 rounded-full border text-[11px] font-semibold tracking-[0.25em] uppercase"
-            initial={{ opacity: 0, scale: 0.9 }}
+            className="inline-flex items-center gap-2 mb-10 px-4 py-2 rounded-full"
+            initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.25 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
             style={{
-              borderColor: "rgba(201,168,76,0.2)",
-              color: "#c9a84c",
-              background: "rgba(201,168,76,0.06)",
+              background: "rgba(93,85,240,0.1)",
+              border: "1px solid rgba(93,85,240,0.2)",
             }}
           >
-            <span
-              className="w-1.5 h-1.5 rounded-full animate-pulse"
-              style={{ background: "#c9a84c" }}
-            />
-            Confidential · Strategy Framework 2026
+            <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: "#18CC90" }} />
+            <span className="text-[11px] font-medium tracking-[0.2em] uppercase" style={{ color: "#7F92AD" }}>
+              Confidential · Strategy Framework 2026
+            </span>
           </motion.div>
 
-          {/* Heading */}
+          {/* Headline */}
           <h1
-            className="font-black leading-[0.88] tracking-tight mb-8 select-none"
+            className="font-light tracking-tight mb-6"
             style={{
-              fontSize: "clamp(52px, 11vw, 110px)",
-              color: "#f0ede8",
-              letterSpacing: "-0.04em",
+              fontSize: "clamp(48px, 9vw, 88px)",
+              lineHeight: 1.0,
+              color: "#FFFFFF",
+              letterSpacing: "-0.02em",
             }}
           >
-            Global
+            Connecting the
             <br />
             <span
               style={{
-                backgroundImage:
-                  "linear-gradient(90deg, #c9a84c 0%, #f0d882 45%, #c9a84c 100%)",
+                backgroundImage: "linear-gradient(94deg, #5D55F0 0%, #18CC90 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
               }}
             >
-              Infrastructure
+              world of business
             </span>
-            <br />
-            Layer.
           </h1>
 
           <p
-            className="text-base md:text-lg max-w-lg mx-auto leading-relaxed mb-14"
-            style={{ color: "#6b6b80" }}
+            className="text-lg font-light max-w-xl mx-auto mb-14"
+            style={{ color: "#7F92AD", lineHeight: 1.6 }}
           >
-            How Binderr becomes the default platform connecting businesses with
-            trusted financial, legal, and compliance providers worldwide.
+            We build trusted infrastructure so businesses can expand anywhere — 21 strategic answers that define how we get there.
           </p>
 
           {/* Stats */}
           <div className="flex flex-wrap justify-center gap-10 mb-14">
             {[
-              { val: "70K+", label: "Verified Users" },
-              { val: "21", label: "Strategic Questions" },
-              { val: "6", label: "Core Pillars" },
+              { val: "70,000+", label: "Verified Users" },
+              { val: "21", label: "Strategic Pillars" },
+              { val: "6", label: "Core Sections" },
             ].map((s, i) => (
               <motion.div
                 key={s.label}
                 className="text-center"
-                initial={{ opacity: 0, y: 16 }}
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 + i * 0.1, duration: 0.5 }}
+                transition={{ delay: 0.35 + i * 0.1 }}
               >
                 <div
-                  className="text-3xl font-black mb-1"
-                  style={{ color: "#c9a84c" }}
+                  className="text-2xl font-semibold mb-1"
+                  style={{ color: i % 2 === 0 ? "#5D55F0" : "#18CC90" }}
                 >
                   {s.val}
                 </div>
-                <div
-                  className="text-[10px] tracking-[0.2em] uppercase"
-                  style={{ color: "#3d3d50" }}
-                >
+                <div className="text-[11px] uppercase tracking-widest" style={{ color: "rgba(127,146,173,0.5)" }}>
                   {s.label}
                 </div>
               </motion.div>
             ))}
           </div>
 
-          {/* CTA */}
-          <motion.a
-            href="#purpose"
-            className="inline-flex items-center gap-3 px-8 py-4 rounded-full text-sm font-bold transition-all duration-300"
-            style={{
-              background: "linear-gradient(135deg, #c9a84c 0%, #a07828 100%)",
-              color: "#000",
-              boxShadow: "0 0 40px rgba(201,168,76,0.25)",
-            }}
-            whileHover={{ scale: 1.04, boxShadow: "0 0 60px rgba(201,168,76,0.35)" }}
-            whileTap={{ scale: 0.97 }}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7, duration: 0.4 }}
-          >
-            Explore the Framework
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 14 14"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
+          {/* CTAs */}
+          <div className="flex flex-wrap justify-center gap-3">
+            <motion.a
+              href="#purpose"
+              className="inline-flex items-center gap-2.5 px-6 py-3 rounded-xl text-sm font-medium transition-all duration-200"
+              style={{
+                background: "linear-gradient(94deg, #5D55F0, #35318A)",
+                color: "#fff",
+                boxShadow: "0 0 40px rgba(93,85,240,0.3)",
+              }}
+              whileHover={{ scale: 1.03, boxShadow: "0 0 60px rgba(93,85,240,0.45)" }}
+              whileTap={{ scale: 0.97 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.65 }}
             >
-              <path d="M1 7h12M7 1l6 6-6 6" />
-            </svg>
-          </motion.a>
+              Explore framework
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+                <path d="M1 7h12M7 1l6 6-6 6" />
+              </svg>
+            </motion.a>
+            <motion.a
+              href="https://binderr.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2.5 px-6 py-3 rounded-xl text-sm font-medium transition-all duration-200"
+              style={{
+                background: "rgba(255,255,255,0.04)",
+                color: "#7F92AD",
+                border: "1px solid rgba(255,255,255,0.08)",
+              }}
+              whileHover={{ background: "rgba(255,255,255,0.07)", color: "#fff" }}
+              whileTap={{ scale: 0.97 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.72 }}
+            >
+              Visit binderr.com
+            </motion.a>
+          </div>
         </motion.div>
 
-        {/* Scroll hint */}
+        {/* Scroll indicator */}
         <motion.div
-          className="absolute bottom-10 left-1/2 -translate-x-1/2"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1"
+          animate={{ y: [0, 8, 0] }}
+          transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
         >
-          <div
-            className="w-px h-14 mx-auto"
-            style={{
-              background:
-                "linear-gradient(180deg, transparent 0%, #c9a84c 50%, transparent 100%)",
-            }}
-          />
+          <span className="text-[10px] tracking-[0.2em] uppercase" style={{ color: "rgba(127,146,173,0.35)" }}>Scroll</span>
+          <div className="w-px h-8" style={{ background: "linear-gradient(180deg, rgba(93,85,240,0.5), transparent)" }} />
         </motion.div>
       </section>
 
-      {/* ── MAIN CONTENT ── */}
-      <main
-        className="max-w-5xl mx-auto px-6 md:px-10 pb-36 pt-8"
-        style={{ paddingTop: 40 }}
-      >
+      {/* ── CONTENT ── */}
+      <main className="max-w-5xl mx-auto px-6 md:px-10 pt-12 pb-36">
         {sections.map((s) => (
           <Section key={s.id} section={s} />
         ))}
       </main>
 
-      {/* ── CLOSING STATEMENT ── */}
+      {/* ── CLOSING BANNER ── */}
       <div
         className="relative py-28 overflow-hidden"
         style={{
-          background:
-            "linear-gradient(180deg, transparent 0%, rgba(201,168,76,0.04) 50%, transparent 100%)",
-          borderTop: "1px solid rgba(255,255,255,0.04)",
-          borderBottom: "1px solid rgba(255,255,255,0.04)",
+          background: "linear-gradient(135deg, rgba(93,85,240,0.08) 0%, rgba(24,204,144,0.04) 100%)",
+          borderTop: "1px solid rgba(93,85,240,0.15)",
+          borderBottom: "1px solid rgba(93,85,240,0.15)",
         }}
       >
-        <div className="max-w-3xl mx-auto px-8 text-center">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: "radial-gradient(ellipse 60% 80% at 50% 50%, rgba(93,85,240,0.1) 0%, transparent 70%)",
+          }}
+        />
+        <div className="relative max-w-3xl mx-auto px-8 text-center">
           <p
-            className="text-[11px] font-bold tracking-[0.3em] uppercase mb-6"
-            style={{ color: "#c9a84c" }}
+            className="text-[11px] font-semibold tracking-[0.3em] uppercase mb-6"
+            style={{ color: "#18CC90" }}
           >
-            The Thesis
+            The thesis
           </p>
           <p
-            className="text-2xl md:text-3xl font-bold leading-snug"
-            style={{ color: "#f0ede8" }}
+            className="font-light"
+            style={{ fontSize: "clamp(24px, 4vw, 40px)", color: "#FFFFFF", lineHeight: 1.3, letterSpacing: "-0.01em" }}
           >
             Those who join early gain{" "}
             <span
               style={{
-                backgroundImage:
-                  "linear-gradient(90deg, #c9a84c, #f0d882)",
+                backgroundImage: "linear-gradient(94deg, #5D55F0, #18CC90)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
@@ -768,14 +742,8 @@ export default function StrategyPage() {
 
       {/* ── FOOTER ── */}
       <footer className="py-12 text-center" style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}>
-        <p
-          className="text-[11px] tracking-[0.25em] uppercase"
-          style={{ color: "#2a2a3a" }}
-        >
+        <p className="text-[11px] tracking-widest uppercase" style={{ color: "rgba(127,146,173,0.25)" }}>
           Binderr © 2026 · Confidential · Do Not Distribute
-        </p>
-        <p className="text-[10px] mt-1.5" style={{ color: "#1e1e2a" }}>
-          Strategy Framework — Regional Expansion
         </p>
       </footer>
     </div>
