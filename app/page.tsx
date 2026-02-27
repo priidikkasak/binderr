@@ -284,7 +284,6 @@ function Card({ item, index }: { item: Item; index: number }) {
         <p style={{
           fontSize: "12px",
           fontWeight: 400,
-          letterSpacing: "0.02em",
           color: "#3D5266",
           lineHeight: 1.5,
           marginBottom: "12px",
