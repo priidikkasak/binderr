@@ -6,44 +6,30 @@ html { scroll-behavior: smooth; }
 
 body {
   background: #00080D;
-  color: #FFFFFF;
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  color: #F0F4F8;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
-::selection { background: #5D55F0; color: #fff; }
-
+::selection { background: rgba(93,85,240,0.5); color: #fff; }
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: #00080D; }
-::-webkit-scrollbar-thumb { background: rgba(93,85,240,0.45); border-radius: 2px; }
+::-webkit-scrollbar-thumb { background: rgba(93,85,240,0.3); border-radius: 2px; }
 
-/* Card grid responsive */
 .card-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 16px;
+  gap: 12px;
 }
 @media (min-width: 768px) {
-  .card-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .card-grid { grid-template-columns: repeat(2, 1fr); }
 }
+.card-wide { grid-column: 1 / -1; }
 
-.card-wide {
-  grid-column: 1 / -1;
-}
-
-/* Responsive padding */
 @media (max-width: 767px) {
-  .main-content {
-    padding: 0 20px 80px !important;
-  }
-  .site-header {
-    padding: 0 20px !important;
-  }
-  .footer-inner {
-    padding: 32px 20px !important;
-  }
+  .page-header { padding: 0 20px !important; }
+  .page-main   { padding-left: 20px !important; padding-right: 20px !important; }
+  .page-footer { padding-left: 24px !important; padding-right: 24px !important; }
 }
