@@ -484,8 +484,8 @@ export default function Page() {
 
         @media (max-width: 767px) {
           /* Header */
-          .sticky-header { height: 88px !important; padding: 0 20px !important; }
-          .header-logo   { height: 76px !important; }
+          .sticky-header { height: 72px !important; padding: 0 20px !important; }
+          .header-logo   { height: 50px !important; }
 
           /* Show burger, hide desktop spacer */
           .burger-btn { display: flex !important; }
@@ -494,7 +494,7 @@ export default function Page() {
           .mobile-nav { display: flex !important; }
 
           /* Hero */
-          .hero-section  { padding-top: 88px !important; min-height: 100svh !important; padding-bottom: 60px !important; }
+          .hero-section  { padding-top: 72px !important; min-height: 100svh !important; padding-bottom: 60px !important; }
           .hero-content  { padding: 0 20px !important; }
           .hero-sub      { font-size: 14px !important; margin-bottom: 32px !important; max-width: 100% !important; }
 
@@ -512,7 +512,7 @@ export default function Page() {
           .page-main { padding: 48px 20px 100px !important; }
 
           /* Sections */
-          .section-block     { margin-bottom: 52px !important; scroll-margin-top: 80px !important; }
+          .section-block     { margin-bottom: 52px !important; scroll-margin-top: 72px !important; }
           .section-title     { font-size: 19px !important; }
           .section-title-wrap { padding-bottom: 12px !important; }
 
