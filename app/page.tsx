@@ -300,11 +300,11 @@ export default function Page() {
           transition: "background 0.5s ease, backdrop-filter 0.5s ease",
         }}
       >
-        <img src="/logo.png" alt="Binderr" className="header-logo" style={{ height: "48px", width: "auto" }} />
+        <img src="/logo.png" alt="Binderr" className="header-logo" style={{ height: "160px", width: "auto" }} />
 
-        {/* Desktop nav pill — absolutely centered */}
+        {/* Desktop nav pill — absolutely centered both axes */}
         <div className="hidden md:flex" style={{
-          position: "absolute", left: "50%", transform: "translateX(-50%)",
+          position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)",
           alignItems: "center", gap: "2px",
           background: "rgba(255,255,255,0.04)",
           border: "1px solid rgba(255,255,255,0.07)",
@@ -485,8 +485,8 @@ export default function Page() {
 
         @media (max-width: 767px) {
           /* Header */
-          .sticky-header { height: 88px !important; padding: 0 20px !important; align-items: center !important; }
-          .header-logo   { height: 72px !important; }
+          .sticky-header { height: 180px !important; padding: 16px 20px 0 !important; align-items: flex-start !important; }
+          .header-logo   { height: 160px !important; }
 
           /* Show burger, hide desktop spacer */
           .burger-btn { display: flex !important; }
@@ -495,7 +495,7 @@ export default function Page() {
           .mobile-nav { display: flex !important; }
 
           /* Hero */
-          .hero-section  { padding-top: 88px !important; min-height: 100svh !important; padding-bottom: 60px !important; justify-content: flex-start !important; padding-top: 120px !important; }
+          .hero-section  { padding-top: 180px !important; min-height: 100svh !important; padding-bottom: 60px !important; justify-content: flex-start !important; }
           .hero-content  { padding: 0 20px !important; }
           .hero-sub      { font-size: 14px !important; margin-bottom: 32px !important; max-width: 100% !important; }
 
@@ -513,7 +513,7 @@ export default function Page() {
           .page-main { padding: 48px 20px 100px !important; }
 
           /* Sections */
-          .section-block     { margin-bottom: 52px !important; scroll-margin-top: 88px !important; }
+          .section-block     { margin-bottom: 52px !important; scroll-margin-top: 180px !important; }
           .section-title     { font-size: 19px !important; }
           .section-title-wrap { padding-bottom: 12px !important; }
 
