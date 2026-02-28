@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 
 // ─── DATA ──────────────────────────────────────────────────────────────────────
 
@@ -215,20 +215,9 @@ function QARow({ item, index }: { item: Item; index: number }) {
         display: "flex",
         gap: "32px",
         padding: "32px 0",
-        borderTop: "1px solid rgba(255,255,255,0.05)",
         position: "relative",
       }}
     >
-      {/* Highlight accent — left border only */}
-      {item.highlight && (
-        <div style={{
-          position: "absolute",
-          left: 0, top: "28px", bottom: "28px",
-          width: "2px",
-          background: "rgba(93,85,240,0.4)",
-          borderRadius: "2px",
-        }} />
-      )}
 
       {/* Number */}
       <span style={{
@@ -343,25 +332,8 @@ function Section({ section }: { section: (typeof SECTIONS)[0] }) {
         animate={visible ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
       >
-        {/* Section header row */}
-        <div style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "20px",
-          marginBottom: "8px",
-          paddingBottom: "20px",
-        }}>
-          <span style={{
-            fontSize: "11px",
-            fontWeight: 600,
-            letterSpacing: "0.22em",
-            textTransform: "uppercase",
-            color: "rgba(93,85,240,0.45)",
-            flexShrink: 0,
-            width: "24px",
-          }}>
-            {section.index}
-          </span>
+        {/* Section header */}
+        <div style={{ marginBottom: "8px", paddingBottom: "20px" }}>
           <h2 style={{
             fontSize: "clamp(22px, 3vw, 30px)",
             fontWeight: 500,
@@ -371,11 +343,6 @@ function Section({ section }: { section: (typeof SECTIONS)[0] }) {
           }}>
             {section.title}
           </h2>
-          <div style={{
-            flex: 1,
-            height: "1px",
-            background: "rgba(255,255,255,0.07)",
-          }} />
         </div>
       </motion.div>
 
@@ -392,8 +359,6 @@ function Section({ section }: { section: (typeof SECTIONS)[0] }) {
 // ─── PAGE ───────────────────────────────────────────────────────────────────────
 
 export default function Page() {
-  const { scrollYProgress } = useScroll();
-  const progressWidth = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   const [activeIdx, setActiveIdx] = useState(-1);
   const [scrolled, setScrolled] = useState(false);
@@ -420,13 +385,6 @@ export default function Page() {
   return (
     <div style={{ background: "#00080D", minHeight: "100vh" }}>
 
-      {/* Progress bar */}
-      <motion.div style={{
-        position: "fixed", top: 0, left: 0, height: "1px",
-        width: progressWidth,
-        background: "linear-gradient(90deg, #5D55F0, rgba(93,85,240,0.2))",
-        zIndex: 60, pointerEvents: "none",
-      }} />
 
       {/* Side nav dots */}
       <nav className="hidden xl:flex" style={{
@@ -466,9 +424,7 @@ export default function Page() {
         }}
       >
         {/* Logo */}
-        <span style={{ fontSize: "15px", fontWeight: 600, color: "#F0F4F8", letterSpacing: "-0.01em" }}>
-          binderr
-        </span>
+        <img src="/logo.png" alt="Binderr" style={{ height: "28px", width: "auto" }} />
 
         {/* Nav */}
         <div className="hidden md:flex" style={{ alignItems: "center", gap: "32px" }}>
@@ -528,14 +484,24 @@ export default function Page() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
+          {/* Logo */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.1, duration: 0.6 }}
+            style={{ marginBottom: "48px" }}
+          >
+            <img src="/logo.png" alt="Binderr" style={{ height: "52px", width: "auto", margin: "0 auto", display: "block" }} />
+          </motion.div>
+
           {/* Eyebrow */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.12, duration: 0.5 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
             style={{
               display: "inline-flex", alignItems: "center", gap: "8px",
-              marginBottom: "44px", padding: "6px 14px",
+              marginBottom: "36px", padding: "6px 14px",
               borderRadius: "100px",
               background: "rgba(255,255,255,0.03)",
               border: "1px solid rgba(255,255,255,0.07)",
@@ -638,7 +604,6 @@ export default function Page() {
       {/* ── CLOSING ── */}
       <div style={{
         position: "relative", padding: "96px 24px",
-        borderTop: "1px solid rgba(255,255,255,0.05)",
       }}>
         <div style={{
           position: "absolute", inset: 0,
@@ -679,12 +644,9 @@ export default function Page() {
           padding: "28px 48px",
           display: "flex", alignItems: "center",
           justifyContent: "space-between", flexWrap: "wrap", gap: "12px",
-          borderTop: "1px solid rgba(255,255,255,0.04)",
         }}
       >
-        <span style={{ fontSize: "14px", fontWeight: 600, color: "rgba(255,255,255,0.25)" }}>
-          binderr
-        </span>
+        <img src="/logo.png" alt="Binderr" style={{ height: "22px", width: "auto", opacity: 0.35 }} />
         <span style={{
           fontSize: "11px", color: "rgba(127,146,173,0.25)",
           letterSpacing: "0.1em", textTransform: "uppercase",
