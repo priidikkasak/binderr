@@ -237,6 +237,8 @@ function Card({ item, index }: { item: Item; index: number }) {
         transition: "border-color 0.25s ease, background 0.25s ease",
         position: "relative",
         overflow: "hidden",
+        display: "flex",
+        flexDirection: "column",
       }}
     >
       {/* Subtle top line on hover */}
@@ -249,7 +251,7 @@ function Card({ item, index }: { item: Item; index: number }) {
         transition: "opacity 0.3s ease",
       }} />
 
-      <div style={{ padding: isWide ? "40px 44px" : "36px 36px" }}>
+      <div style={{ padding: isWide ? "40px 44px" : "36px 36px", display: "flex", flexDirection: "column", flex: 1 }}>
 
         {/* Top row: number + tag */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "24px" }}>
@@ -284,7 +286,7 @@ function Card({ item, index }: { item: Item; index: number }) {
         <p style={{
           fontSize: "12px",
           fontWeight: 400,
-          color: "#3D5266",
+          color: "#5A7A95",
           lineHeight: 1.5,
           marginBottom: "12px",
           textTransform: "uppercase",
@@ -319,7 +321,7 @@ function Card({ item, index }: { item: Item; index: number }) {
               <li key={i} style={{
                 display: "flex", alignItems: "flex-start", gap: "12px",
                 fontSize: "15px", fontWeight: 400,
-                color: "#8CA4BA", lineHeight: 1.6,
+                color: "#C2D4E4", lineHeight: 1.6,
               }}>
                 <span style={{
                   marginTop: "9px", width: "4px", height: "4px",
@@ -333,8 +335,9 @@ function Card({ item, index }: { item: Item; index: number }) {
           <p style={{
             fontSize: "16px",
             fontWeight: 400,
-            color: "#8CA4BA",
+            color: "#C2D4E4",
             lineHeight: 1.7,
+            flex: 1,
           }}>
             {item.a}
           </p>
@@ -357,7 +360,7 @@ function Card({ item, index }: { item: Item; index: number }) {
               fontWeight: 500,
               textTransform: "uppercase",
               letterSpacing: "0.15em",
-              color: "#2D4155",
+              color: "#5A7A95",
             }}>
               {item.statLabel}
             </span>
@@ -379,7 +382,7 @@ function Section({ section }: { section: (typeof SECTIONS)[0] }) {
         initial={{ opacity: 0, y: 14 }}
         animate={visible ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-        style={{ marginBottom: "36px", position: "relative", overflow: "hidden" }}
+        style={{ marginBottom: "36px", position: "relative" }}
       >
         {/* Ghost watermark */}
         <span style={{
@@ -523,7 +526,7 @@ export default function Page() {
           </span>
         </div>
 
-        <div className="hidden md:flex" style={{ alignItems: "center", gap: "28px" }}>
+        <div className="hidden md:flex" style={{ alignItems: "center", gap: "24px" }}>
           {SECTIONS.map((s) => (
             <a key={s.id} href={`#${s.id}`} style={{
               fontSize: "13px", fontWeight: 400,
@@ -539,7 +542,7 @@ export default function Page() {
         </div>
 
         <a href="#purpose" className="hidden md:inline-flex" style={{
-          display: "inline-flex", alignItems: "center", gap: "8px",
+          alignItems: "center", gap: "8px",
           fontSize: "13px", fontWeight: 500, color: "#fff",
           background: "linear-gradient(94deg, #5D55F0 3.64%, #35318A 148.92%)",
           padding: "7px 16px", borderRadius: "10px",
@@ -636,7 +639,7 @@ export default function Page() {
 
           <p style={{
             fontSize: "18px", fontWeight: 400,
-            color: "rgba(127,146,173,0.7)",
+            color: "#7F92AD",
             lineHeight: 1.7, maxWidth: "480px",
             margin: "0 auto 56px",
           }}>
@@ -670,7 +673,7 @@ export default function Page() {
                 <div style={{
                   fontSize: "11px", fontWeight: 500,
                   textTransform: "uppercase", letterSpacing: "0.16em",
-                  color: "rgba(127,146,173,0.35)",
+                  color: "rgba(127,146,173,0.55)",
                 }}>
                   {s.label}
                 </div>
@@ -730,7 +733,7 @@ export default function Page() {
         className="page-main"
         style={{
           maxWidth: "960px", margin: "0 auto",
-          padding: "16px 40px 120px",
+          padding: "80px 40px 120px",
           position: "relative",
         }}
       >
@@ -796,11 +799,11 @@ export default function Page() {
           borderTop: "1px solid rgba(255,255,255,0.04)",
         }}
       >
-        <span style={{ fontSize: "14px", fontWeight: 600, color: "rgba(255,255,255,0.12)" }}>
+        <span style={{ fontSize: "14px", fontWeight: 600, color: "rgba(255,255,255,0.3)" }}>
           binderr
         </span>
         <span style={{
-          fontSize: "11px", color: "rgba(127,146,173,0.2)",
+          fontSize: "11px", color: "rgba(127,146,173,0.3)",
           letterSpacing: "0.1em", textTransform: "uppercase",
         }}>
           © 2026 · Confidential · Do Not Distribute
