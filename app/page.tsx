@@ -19,7 +19,7 @@ const SECTIONS = [
       {
         n: "02",
         q: "Why the world needs us",
-        a: "Starting and operating a business globally is fragmented, slow, and trust-constrained — Binderr removes friction, reduces risk, and compresses weeks of operational setup into a single streamlined experience.",
+        a: "Starting and operating a business globally is fragmented, slow, and trust-constrained -Binderr removes friction, reduces risk, and compresses weeks of operational setup into a single streamlined experience.",
       },
       {
         n: "03",
@@ -36,7 +36,7 @@ const SECTIONS = [
       {
         n: "04",
         q: "The secret we believe that others don't",
-        a: "The future is not individual providers competing for clients — it's infrastructure platforms owning distribution, trust, and onboarding at scale.",
+        a: "The future is not individual providers competing for clients -it's infrastructure platforms owning distribution, trust, and onboarding at scale.",
       },
       {
         n: "05",
@@ -52,9 +52,7 @@ const SECTIONS = [
       {
         n: "07",
         q: "Where we're already winning",
-        a: "Early provider onboarding, verified compliance user base, and qualified inbound demand generation.",
-        stat: "70,000+",
-        statLabel: "Verified users",
+        a: "Early provider onboarding, verified compliance user base, and qualified inbound demand generation - 70,000+ verified users and growing.",
       },
       {
         n: "08",
@@ -158,7 +156,7 @@ const SECTIONS = [
       {
         n: "20",
         q: "The narrative we want repeated",
-        a: "Binderr is becoming the infrastructure layer for global business operations — those who join early gain disproportionate access, growth, and opportunity.",
+        a: "Binderr is becoming the infrastructure layer for global business operations -those who join early gain disproportionate access, growth, and opportunity.",
       },
       {
         n: "21",
@@ -404,7 +402,7 @@ export default function Page() {
         ))}
       </nav>
 
-      {/* Header — always visible sticky */}
+      {/* Header -always visible sticky */}
       <header
         className="page-header sticky-header"
         style={{
@@ -420,7 +418,7 @@ export default function Page() {
         {/* Logo */}
         <img src="/logo.png" alt="Binderr" className="header-logo" style={{ height: "148px", width: "auto" }} />
 
-        {/* Nav — pill container */}
+        {/* Nav -pill container */}
         <div className="hidden md:flex" style={{
           alignItems: "center", gap: "2px",
           background: "rgba(255,255,255,0.04)",
