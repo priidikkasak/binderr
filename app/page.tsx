@@ -325,7 +325,7 @@ export default function Page() {
               onMouseLeave={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = "transparent"; }}
               >
                 <span style={{ fontSize: "10px", fontWeight: 500, color: isActive ? "rgba(93,85,240,0.9)" : "rgba(127,146,173,0.35)", letterSpacing: "0.05em", fontVariantNumeric: "tabular-nums", lineHeight: 1 }}>{s.index}</span>
-                <span style={{ fontSize: "12px", fontWeight: isActive ? 500 : 400, color: isActive ? "#F0F4F8" : "rgba(127,146,173,0.6)", letterSpacing: "-0.01em", transition: "color 0.25s" }}>{s.title}</span>
+                <span style={{ fontSize: "12px", fontWeight: isActive ? 500 : 400, color: isActive ? "#F0F4F8" : "rgba(127,146,173,0.6)", letterSpacing: "-0.01em", transition: "color 0.25s", whiteSpace: "nowrap" }}>{s.title}</span>
               </a>
             );
           })}
