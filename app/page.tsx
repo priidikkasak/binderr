@@ -293,14 +293,14 @@ export default function Page() {
         style={{
           position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
           height: "180px", display: "flex", alignItems: "center",
-          justifyContent: "space-between", padding: "0 48px",
+          justifyContent: "space-between", padding: "0 48px 0 24px",
           background: scrolled ? "rgba(0,8,13,0.92)" : "transparent",
           backdropFilter: scrolled ? "blur(24px)" : "none",
           WebkitBackdropFilter: scrolled ? "blur(24px)" : "none",
           transition: "background 0.5s ease, backdrop-filter 0.5s ease",
         }}
       >
-        <img src="/logo.png" alt="Binderr" className="header-logo" style={{ height: "180px", width: "auto" }} />
+        <img src="/logo.png" alt="Binderr" className="header-logo" style={{ height: "48px", width: "auto" }} />
 
         {/* Desktop nav pill — absolutely centered */}
         <div className="hidden md:flex" style={{
