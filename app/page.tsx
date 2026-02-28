@@ -141,6 +141,14 @@ export default function Page() {
   const [scrolled, setScrolled] = useState(false);
   const [pastHero, setPastHero] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   useEffect(() => {
     const fn = () => {
@@ -292,15 +300,20 @@ export default function Page() {
         className="page-header sticky-header"
         style={{
           position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
-          height: "180px", display: "flex", alignItems: "center",
-          justifyContent: "space-between", padding: "0 48px 0 24px",
+          height: isMobile ? "180px" : "180px",
+          display: "flex", alignItems: "center",
+          justifyContent: "space-between",
+          padding: isMobile ? "0" : "0 48px 0 24px",
           background: scrolled ? "rgba(0,8,13,0.92)" : "transparent",
           backdropFilter: scrolled ? "blur(24px)" : "none",
           WebkitBackdropFilter: scrolled ? "blur(24px)" : "none",
           transition: "background 0.5s ease, backdrop-filter 0.5s ease",
         }}
       >
-        <img src="/logo.png" alt="Binderr" className="header-logo" style={{ height: "160px", width: "auto" }} />
+        <img src="/logo.png" alt="Binderr" style={{
+          height: "160px", width: "auto",
+          ...(isMobile ? { position: "absolute", top: "12px", left: "16px" } : {}),
+        }} />
 
         {/* Desktop nav pill — absolutely centered both axes */}
         <div className="hidden md:flex" style={{
@@ -336,7 +349,9 @@ export default function Page() {
           className="burger-btn"
           onClick={() => setMenuOpen(true)}
           style={{
-            display: "none", background: "none", border: "none",
+            display: isMobile ? "flex" : "none",
+            position: "absolute", top: "20px", right: "20px",
+            background: "none", border: "none",
             cursor: "pointer", padding: "8px", flexDirection: "column",
             gap: "5px", alignItems: "flex-end",
           }}
@@ -354,7 +369,7 @@ export default function Page() {
         position: "relative", minHeight: "100vh",
         display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center",
-        overflow: "hidden", paddingTop: "180px",
+        overflow: "hidden", paddingTop: isMobile ? "190px" : "180px",
       }}>
         <div style={{
           position: "absolute", top: "-200px", left: "50%", transform: "translateX(-50%)",
@@ -484,13 +499,6 @@ export default function Page() {
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
 
         @media (max-width: 767px) {
-          /* Header */
-          .sticky-header { height: 180px !important; padding: 0 !important; }
-          .header-logo   { position: absolute !important; top: 12px !important; left: 16px !important; height: 160px !important; width: auto !important; }
-
-          /* Show burger, pin top-right */
-          .burger-btn { display: flex !important; position: absolute !important; top: 20px !important; right: 20px !important; margin-top: 0 !important; }
-
           /* Mobile bottom nav */
           .mobile-nav { display: flex !important; }
 
