@@ -485,11 +485,11 @@ export default function Page() {
 
         @media (max-width: 767px) {
           /* Header */
-          .sticky-header { height: 250px !important; padding: 0 20px !important; }
+          .sticky-header { height: 250px !important; padding: 16px 20px 0 !important; align-items: flex-start !important; }
           .header-logo   { height: 220px !important; }
 
           /* Show burger, hide desktop spacer */
-          .burger-btn { display: flex !important; }
+          .burger-btn { display: flex !important; margin-top: 6px !important; }
 
           /* Mobile bottom nav */
           .mobile-nav { display: flex !important; }
