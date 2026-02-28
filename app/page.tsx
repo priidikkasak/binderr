@@ -190,7 +190,7 @@ type Item = {
 
 // ─── HOOK ──────────────────────────────────────────────────────────────────────
 
-function useInView(threshold = 0.07) {
+function useInView(threshold = 0.06) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   useEffect(() => {
@@ -206,126 +206,107 @@ function useInView(threshold = 0.07) {
   return { ref, visible };
 }
 
-// ─── CARD ──────────────────────────────────────────────────────────────────────
+// ─── Q&A ROW ───────────────────────────────────────────────────────────────────
 
-function Card({ item, index }: { item: Item; index: number }) {
+function QARow({ item, index }: { item: Item; index: number }) {
   const { ref, visible } = useInView();
-  const [hovered, setHovered] = useState(false);
-  const isWide = item.big || item.highlight;
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 18 }}
+      initial={{ opacity: 0, y: 10 }}
       animate={visible ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5, delay: index * 0.07, ease: [0.16, 1, 0.3, 1] }}
-      className={isWide ? "card-wide" : ""}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      transition={{ duration: 0.4, delay: index * 0.055, ease: [0.16, 1, 0.3, 1] }}
       style={{
-        borderRadius: "16px",
-        border: `1px solid ${
-          item.highlight
-            ? "rgba(93,85,240,0.25)"
-            : hovered
-            ? "rgba(255,255,255,0.13)"
-            : "rgba(255,255,255,0.07)"
-        }`,
-        background: item.highlight
-          ? "linear-gradient(145deg, rgba(93,85,240,0.07) 0%, rgba(4,10,20,1) 60%)"
-          : "#070E18",
-        transition: "border-color 0.25s ease, background 0.25s ease",
-        position: "relative",
-        overflow: "hidden",
         display: "flex",
-        flexDirection: "column",
+        gap: "48px",
+        padding: "28px 0",
+        borderTop: "1px solid rgba(255,255,255,0.05)",
+        position: "relative",
       }}
     >
-      {/* Subtle top line on hover */}
-      <div style={{
-        position: "absolute",
-        top: 0, left: "20%", right: "20%",
-        height: "1px",
-        background: "linear-gradient(90deg, transparent, rgba(93,85,240,0.5), transparent)",
-        opacity: hovered ? 1 : 0,
-        transition: "opacity 0.3s ease",
-      }} />
+      {/* Highlight accent — left border only */}
+      {item.highlight && (
+        <div style={{
+          position: "absolute",
+          left: 0, top: "28px", bottom: "28px",
+          width: "2px",
+          background: "rgba(93,85,240,0.4)",
+          borderRadius: "2px",
+        }} />
+      )}
 
-      <div style={{ padding: isWide ? "40px 44px" : "36px 36px", display: "flex", flexDirection: "column", flex: 1 }}>
+      {/* Number */}
+      <span style={{
+        fontSize: "11px",
+        fontWeight: 600,
+        letterSpacing: "0.18em",
+        color: "rgba(93,85,240,0.45)",
+        flexShrink: 0,
+        width: "24px",
+        paddingTop: "3px",
+        paddingLeft: item.highlight ? "14px" : "0",
+      }}>
+        {item.n}
+      </span>
 
-        {/* Top row: number + tag */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "24px" }}>
-          <span style={{
+      {/* Content */}
+      <div style={{ flex: 1, minWidth: 0 }}>
+
+        {/* Question + optional tag */}
+        <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px", flexWrap: "wrap" }}>
+          <p style={{
             fontSize: "11px",
-            fontWeight: 600,
-            letterSpacing: "0.22em",
-            color: "rgba(93,85,240,0.6)",
+            fontWeight: 500,
+            letterSpacing: "0.07em",
             textTransform: "uppercase",
+            color: "#5A7A95",
+            lineHeight: 1.4,
           }}>
-            {item.n}
-          </span>
-
+            {item.q}
+          </p>
           {item.tag && (
             <span style={{
-              fontSize: "10px",
+              fontSize: "9px",
               fontWeight: 600,
-              letterSpacing: "0.16em",
+              letterSpacing: "0.14em",
               textTransform: "uppercase",
-              color: item.tagType === "positive" ? "rgba(255,255,255,0.5)" : "rgba(255,255,255,0.35)",
-              background: item.tagType === "positive" ? "rgba(255,255,255,0.06)" : "rgba(255,255,255,0.04)",
-              border: "1px solid rgba(255,255,255,0.08)",
-              padding: "3px 10px",
+              color: item.tagType === "positive" ? "rgba(255,255,255,0.4)" : "rgba(220,80,80,0.6)",
+              border: `1px solid ${item.tagType === "positive" ? "rgba(255,255,255,0.1)" : "rgba(220,80,80,0.2)"}`,
+              padding: "2px 8px",
               borderRadius: "100px",
+              flexShrink: 0,
             }}>
               {item.tag}
             </span>
           )}
         </div>
 
-        {/* Question */}
-        <p style={{
-          fontSize: "12px",
-          fontWeight: 400,
-          color: "#5A7A95",
-          lineHeight: 1.5,
-          marginBottom: "12px",
-          textTransform: "uppercase",
-          letterSpacing: "0.06em",
-        }}>
-          {item.q}
-        </p>
-
-        {/* Separator */}
-        <div style={{
-          height: "1px",
-          background: item.highlight
-            ? "rgba(93,85,240,0.2)"
-            : "rgba(255,255,255,0.05)",
-          marginBottom: "20px",
-        }} />
-
         {/* Answer */}
         {item.big ? (
           <p style={{
-            fontSize: "clamp(20px, 3vw, 28px)",
+            fontSize: "clamp(18px, 2.2vw, 22px)",
             fontWeight: 500,
             color: "#F0F4F8",
-            lineHeight: 1.3,
-            letterSpacing: "-0.015em",
+            lineHeight: 1.45,
+            letterSpacing: "-0.01em",
           }}>
             {item.a}
           </p>
         ) : item.bullets ? (
-          <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "10px" }}>
+          <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "8px" }}>
             {item.bullets.map((b, i) => (
               <li key={i} style={{
                 display: "flex", alignItems: "flex-start", gap: "12px",
                 fontSize: "15px", fontWeight: 400,
-                color: "#C2D4E4", lineHeight: 1.6,
+                color: "#C2D4E4", lineHeight: 1.65,
               }}>
                 <span style={{
-                  marginTop: "9px", width: "4px", height: "4px",
-                  borderRadius: "50%", background: "rgba(93,85,240,0.5)", flexShrink: 0,
+                  marginTop: "9px",
+                  width: "3px", height: "3px",
+                  borderRadius: "50%",
+                  background: "rgba(93,85,240,0.5)",
+                  flexShrink: 0,
                 }} />
                 {b}
               </li>
@@ -335,9 +316,8 @@ function Card({ item, index }: { item: Item; index: number }) {
           <p style={{
             fontSize: "16px",
             fontWeight: 400,
-            color: "#C2D4E4",
+            color: item.highlight ? "#D8E8F4" : "#C2D4E4",
             lineHeight: 1.7,
-            flex: 1,
           }}>
             {item.a}
           </p>
@@ -345,9 +325,9 @@ function Card({ item, index }: { item: Item; index: number }) {
 
         {/* Stat */}
         {item.stat && (
-          <div style={{ marginTop: "28px", display: "flex", alignItems: "baseline", gap: "10px" }}>
+          <div style={{ marginTop: "20px", display: "flex", alignItems: "baseline", gap: "10px" }}>
             <span style={{
-              fontSize: "42px",
+              fontSize: "38px",
               fontWeight: 600,
               color: "#F0F4F8",
               letterSpacing: "-0.03em",
@@ -359,7 +339,7 @@ function Card({ item, index }: { item: Item; index: number }) {
               fontSize: "11px",
               fontWeight: 500,
               textTransform: "uppercase",
-              letterSpacing: "0.15em",
+              letterSpacing: "0.14em",
               color: "#5A7A95",
             }}>
               {item.statLabel}
@@ -377,61 +357,52 @@ function Section({ section }: { section: (typeof SECTIONS)[0] }) {
   const { ref, visible } = useInView(0.04);
 
   return (
-    <section ref={ref} id={section.id} style={{ marginBottom: "128px", scrollMarginTop: "96px" }}>
+    <section ref={ref} id={section.id} style={{ marginBottom: "96px", scrollMarginTop: "80px" }}>
       <motion.div
-        initial={{ opacity: 0, y: 14 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={visible ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-        style={{ marginBottom: "36px", position: "relative" }}
+        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
       >
-        {/* Ghost watermark */}
-        <span style={{
-          position: "absolute",
-          top: "-12px",
-          left: "-3px",
-          fontSize: "clamp(72px, 12vw, 130px)",
-          fontWeight: 700,
-          color: "rgba(93,85,240,0.04)",
-          lineHeight: 1,
-          letterSpacing: "-0.04em",
-          userSelect: "none",
-          pointerEvents: "none",
-          whiteSpace: "nowrap",
+        {/* Section header row */}
+        <div style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "20px",
+          marginBottom: "8px",
+          paddingBottom: "20px",
         }}>
-          {section.title}
-        </span>
-
-        <div style={{ position: "relative" }}>
-          {/* Index + line */}
-          <div style={{ display: "flex", alignItems: "center", gap: "14px", marginBottom: "10px" }}>
-            <span style={{
-              fontSize: "11px", fontWeight: 600,
-              letterSpacing: "0.26em", textTransform: "uppercase",
-              color: "rgba(93,85,240,0.5)",
-            }}>
-              {section.index}
-            </span>
-            <div style={{
-              flex: 1, height: "1px",
-              background: "rgba(255,255,255,0.06)",
-            }} />
-          </div>
-
+          <span style={{
+            fontSize: "11px",
+            fontWeight: 600,
+            letterSpacing: "0.22em",
+            textTransform: "uppercase",
+            color: "rgba(93,85,240,0.45)",
+            flexShrink: 0,
+            width: "24px",
+          }}>
+            {section.index}
+          </span>
           <h2 style={{
-            fontSize: "clamp(28px, 4vw, 40px)",
+            fontSize: "clamp(22px, 3vw, 30px)",
             fontWeight: 500,
             color: "#F0F4F8",
             letterSpacing: "-0.02em",
-            lineHeight: 1.1,
+            lineHeight: 1,
           }}>
             {section.title}
           </h2>
+          <div style={{
+            flex: 1,
+            height: "1px",
+            background: "rgba(255,255,255,0.07)",
+          }} />
         </div>
       </motion.div>
 
-      <div className="card-grid">
+      {/* Items */}
+      <div>
         {section.items.map((item, i) => (
-          <Card key={item.n} item={item} index={i} />
+          <QARow key={item.n} item={item} index={i} />
         ))}
       </div>
     </section>
@@ -458,7 +429,7 @@ export default function Page() {
       let found = -1;
       for (let i = SECTIONS.length - 1; i >= 0; i--) {
         const el = document.getElementById(SECTIONS[i].id);
-        if (el && el.getBoundingClientRect().top <= 130) { found = i; break; }
+        if (el && el.getBoundingClientRect().top <= 120) { found = i; break; }
       }
       setActiveIdx(found);
     };
@@ -468,28 +439,30 @@ export default function Page() {
 
   return (
     <div style={{ background: "#00080D", minHeight: "100vh" }}>
+
       {/* Progress bar */}
       <motion.div style={{
         position: "fixed", top: 0, left: 0, height: "1px",
         width: progressWidth,
-        background: "linear-gradient(90deg, #5D55F0, rgba(93,85,240,0.3))",
+        background: "linear-gradient(90deg, #5D55F0, rgba(93,85,240,0.2))",
         zIndex: 60, pointerEvents: "none",
       }} />
 
-      {/* Side nav */}
+      {/* Side nav dots */}
       <nav className="hidden xl:flex" style={{
         position: "fixed", right: "28px", top: "50%",
         transform: "translateY(-50%)", zIndex: 40,
         flexDirection: "column", gap: "10px",
       }}>
         {SECTIONS.map((s, i) => (
-          <a key={s.id} href={`#${s.id}`} title={s.title} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <a key={s.id} href={`#${s.id}`} title={s.title}
+            style={{ display: "flex", alignItems: "center" }}>
             <span style={{
               display: "block",
               height: "5px",
               width: activeIdx === i ? "20px" : "5px",
               borderRadius: "3px",
-              background: activeIdx === i ? "rgba(93,85,240,0.8)" : "rgba(255,255,255,0.12)",
+              background: activeIdx === i ? "rgba(93,85,240,0.7)" : "rgba(255,255,255,0.1)",
               transition: "all 0.3s ease",
             }} />
           </a>
@@ -503,30 +476,22 @@ export default function Page() {
         transition={{ duration: 0.22, ease: "easeInOut" }}
         style={{
           position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
-          height: "64px", display: "flex", alignItems: "center",
+          height: "60px", display: "flex", alignItems: "center",
           justifyContent: "space-between", padding: "0 48px",
-          background: scrolled ? "rgba(0,8,13,0.92)" : "transparent",
-          backdropFilter: scrolled ? "blur(24px)" : "none",
-          WebkitBackdropFilter: scrolled ? "blur(24px)" : "none",
+          background: scrolled ? "rgba(0,8,13,0.94)" : "transparent",
+          backdropFilter: scrolled ? "blur(20px)" : "none",
+          WebkitBackdropFilter: scrolled ? "blur(20px)" : "none",
           borderBottom: scrolled ? "1px solid rgba(255,255,255,0.05)" : "1px solid transparent",
           transition: "background 0.4s, border-color 0.4s",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <span style={{ fontSize: "15px", fontWeight: 600, color: "#F0F4F8", letterSpacing: "-0.01em" }}>
-            binderr
-          </span>
-          <span style={{
-            fontSize: "10px", fontWeight: 500, letterSpacing: "0.16em",
-            textTransform: "uppercase", color: "rgba(93,85,240,0.7)",
-            background: "rgba(93,85,240,0.08)", border: "1px solid rgba(93,85,240,0.15)",
-            padding: "3px 9px", borderRadius: "100px",
-          }}>
-            Strategy
-          </span>
-        </div>
+        {/* Logo */}
+        <span style={{ fontSize: "15px", fontWeight: 600, color: "#F0F4F8", letterSpacing: "-0.01em" }}>
+          binderr
+        </span>
 
-        <div className="hidden md:flex" style={{ alignItems: "center", gap: "24px" }}>
+        {/* Nav */}
+        <div className="hidden md:flex" style={{ alignItems: "center", gap: "32px" }}>
           {SECTIONS.map((s) => (
             <a key={s.id} href={`#${s.id}`} style={{
               fontSize: "13px", fontWeight: 400,
@@ -541,18 +506,8 @@ export default function Page() {
           ))}
         </div>
 
-        <a href="#purpose" className="hidden md:inline-flex" style={{
-          alignItems: "center", gap: "8px",
-          fontSize: "13px", fontWeight: 500, color: "#fff",
-          background: "linear-gradient(94deg, #5D55F0 3.64%, #35318A 148.92%)",
-          padding: "7px 16px", borderRadius: "10px",
-          textDecoration: "none", transition: "opacity 0.2s",
-        }}
-        onMouseEnter={e => (e.currentTarget.style.opacity = "0.8")}
-        onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
-        >
-          View Framework
-        </a>
+        {/* Right placeholder for balance */}
+        <span style={{ width: "80px" }} className="hidden md:block" />
       </motion.header>
 
       {/* ── HERO ── */}
@@ -560,14 +515,14 @@ export default function Page() {
         position: "relative", minHeight: "100vh",
         display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center",
-        overflow: "hidden", paddingTop: "64px",
+        overflow: "hidden", paddingTop: "60px",
       }}>
-        {/* Single subtle purple glow top-center */}
+        {/* Top glow */}
         <div style={{
-          position: "absolute", top: "-300px", left: "50%",
+          position: "absolute", top: "-200px", left: "50%",
           transform: "translateX(-50%)",
-          width: "800px", height: "800px", borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(93,85,240,0.14) 0%, transparent 65%)",
+          width: "700px", height: "700px", borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(93,85,240,0.13) 0%, transparent 65%)",
           pointerEvents: "none",
         }} />
 
@@ -575,17 +530,21 @@ export default function Page() {
         <div style={{
           position: "absolute", inset: 0, pointerEvents: "none",
           backgroundImage: `
-            linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)
+            linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px)
           `,
           backgroundSize: "80px 80px",
-          maskImage: "radial-gradient(ellipse 70% 70% at 50% 50%, black 20%, transparent 100%)",
-          WebkitMaskImage: "radial-gradient(ellipse 70% 70% at 50% 50%, black 20%, transparent 100%)",
+          maskImage: "radial-gradient(ellipse 65% 65% at 50% 50%, black 20%, transparent 100%)",
+          WebkitMaskImage: "radial-gradient(ellipse 65% 65% at 50% 50%, black 20%, transparent 100%)",
         }} />
 
         <motion.div
-          style={{ position: "relative", zIndex: 10, textAlign: "center", padding: "0 24px", maxWidth: "800px", width: "100%" }}
-          initial={{ opacity: 0, y: 32 }}
+          style={{
+            position: "relative", zIndex: 10,
+            textAlign: "center", padding: "0 24px",
+            maxWidth: "720px", width: "100%",
+          }}
+          initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
@@ -593,24 +552,24 @@ export default function Page() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.15, duration: 0.5 }}
+            transition={{ delay: 0.12, duration: 0.5 }}
             style={{
               display: "inline-flex", alignItems: "center", gap: "8px",
-              marginBottom: "48px", padding: "7px 16px",
+              marginBottom: "44px", padding: "6px 14px",
               borderRadius: "100px",
               background: "rgba(255,255,255,0.03)",
-              border: "1px solid rgba(255,255,255,0.08)",
+              border: "1px solid rgba(255,255,255,0.07)",
             }}
           >
             <span style={{
               width: "5px", height: "5px", borderRadius: "50%",
-              background: "rgba(93,85,240,0.8)", flexShrink: 0,
+              background: "rgba(93,85,240,0.7)", flexShrink: 0,
               animation: "pulse 2.5s ease-in-out infinite",
             }} />
             <span style={{
               fontSize: "11px", fontWeight: 500,
-              letterSpacing: "0.16em", textTransform: "uppercase",
-              color: "rgba(127,146,173,0.6)",
+              letterSpacing: "0.15em", textTransform: "uppercase",
+              color: "rgba(127,146,173,0.55)",
             }}>
               Confidential · Strategy Framework 2026
             </span>
@@ -618,17 +577,17 @@ export default function Page() {
 
           {/* Headline */}
           <h1 style={{
-            fontSize: "clamp(48px, 8.5vw, 84px)",
+            fontSize: "clamp(46px, 8vw, 80px)",
             fontWeight: 500,
             lineHeight: 1.05,
             letterSpacing: "-0.03em",
             color: "#F0F4F8",
-            marginBottom: "28px",
+            marginBottom: "24px",
           }}>
             Connecting the
             <br />
             <span style={{
-              backgroundImage: "linear-gradient(94deg, #5D55F0 0%, rgba(93,85,240,0.6) 100%)",
+              backgroundImage: "linear-gradient(94deg, #6B63F5 0%, #4a44b5 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
@@ -638,10 +597,10 @@ export default function Page() {
           </h1>
 
           <p style={{
-            fontSize: "18px", fontWeight: 400,
+            fontSize: "17px", fontWeight: 400,
             color: "#7F92AD",
-            lineHeight: 1.7, maxWidth: "480px",
-            margin: "0 auto 56px",
+            lineHeight: 1.7, maxWidth: "440px",
+            margin: "0 auto 52px",
           }}>
             We build trusted infrastructure so businesses can expand anywhere.
             21 strategic answers that define how we get there.
@@ -650,7 +609,7 @@ export default function Page() {
           {/* Stats */}
           <div style={{
             display: "flex", justifyContent: "center",
-            flexWrap: "wrap", gap: "56px", marginBottom: "52px",
+            flexWrap: "wrap", gap: "52px",
           }}>
             {[
               { val: "70,000+", label: "Verified Users" },
@@ -660,71 +619,26 @@ export default function Page() {
               <motion.div
                 key={s.label}
                 style={{ textAlign: "center" }}
-                initial={{ opacity: 0, y: 12 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 + i * 0.08 }}
+                transition={{ delay: 0.28 + i * 0.07 }}
               >
                 <div style={{
-                  fontSize: "30px", fontWeight: 600,
-                  color: "#F0F4F8", letterSpacing: "-0.02em", marginBottom: "4px",
+                  fontSize: "28px", fontWeight: 600,
+                  color: "#F0F4F8", letterSpacing: "-0.02em", marginBottom: "5px",
                 }}>
                   {s.val}
                 </div>
                 <div style={{
                   fontSize: "11px", fontWeight: 500,
                   textTransform: "uppercase", letterSpacing: "0.16em",
-                  color: "rgba(127,146,173,0.55)",
+                  color: "rgba(127,146,173,0.45)",
                 }}>
                   {s.label}
                 </div>
               </motion.div>
             ))}
           </div>
-
-          {/* CTA */}
-          <motion.a
-            href="#purpose"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.55 }}
-            style={{
-              display: "inline-flex", alignItems: "center", gap: "10px",
-              padding: "13px 28px", borderRadius: "12px",
-              background: "linear-gradient(94deg, #5D55F0 3.64%, #35318A 148.92%)",
-              color: "#fff", fontSize: "15px", fontWeight: 500,
-              textDecoration: "none",
-              boxShadow: "0 0 40px rgba(93,85,240,0.25), 0 1px 0 rgba(255,255,255,0.1) inset",
-            }}
-            whileHover={{ scale: 1.02, boxShadow: "0 0 56px rgba(93,85,240,0.4), 0 1px 0 rgba(255,255,255,0.1) inset" }}
-            whileTap={{ scale: 0.98 }}
-          >
-            Explore Framework
-            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round">
-              <path d="M3 7.5h9M8 3l4.5 4.5L8 12" />
-            </svg>
-          </motion.a>
-        </motion.div>
-
-        {/* Scroll cue */}
-        <motion.div
-          style={{
-            position: "absolute", bottom: "32px", left: "50%",
-            transform: "translateX(-50%)",
-            display: "flex", flexDirection: "column",
-            alignItems: "center", gap: "6px",
-          }}
-          animate={{ y: [0, 7, 0] }}
-          transition={{ repeat: Infinity, duration: 2.8, ease: "easeInOut" }}
-        >
-          <span style={{
-            fontSize: "10px", fontWeight: 400,
-            letterSpacing: "0.2em", textTransform: "uppercase",
-            color: "rgba(127,146,173,0.25)",
-          }}>scroll</span>
-          <div style={{
-            width: "1px", height: "28px",
-            background: "linear-gradient(180deg, rgba(93,85,240,0.4), transparent)",
-          }} />
         </motion.div>
       </section>
 
@@ -732,19 +646,10 @@ export default function Page() {
       <main
         className="page-main"
         style={{
-          maxWidth: "960px", margin: "0 auto",
+          maxWidth: "760px", margin: "0 auto",
           padding: "80px 40px 120px",
-          position: "relative",
         }}
       >
-        {/* Single very subtle bg orb for depth */}
-        <div style={{
-          position: "absolute", top: "30%", right: "-300px",
-          width: "600px", height: "600px", borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(93,85,240,0.05) 0%, transparent 70%)",
-          pointerEvents: "none",
-        }} />
-
         {SECTIONS.map((s) => (
           <Section key={s.id} section={s} />
         ))}
@@ -752,32 +657,30 @@ export default function Page() {
 
       {/* ── CLOSING ── */}
       <div style={{
-        position: "relative", padding: "100px 24px",
+        position: "relative", padding: "96px 24px",
         borderTop: "1px solid rgba(255,255,255,0.05)",
-        borderBottom: "1px solid rgba(255,255,255,0.05)",
-        overflow: "hidden",
       }}>
         <div style={{
           position: "absolute", inset: 0,
-          background: "radial-gradient(ellipse 60% 80% at 50% 50%, rgba(93,85,240,0.08) 0%, transparent 70%)",
+          background: "radial-gradient(ellipse 50% 80% at 50% 50%, rgba(93,85,240,0.07) 0%, transparent 70%)",
           pointerEvents: "none",
         }} />
-        <div style={{ position: "relative", maxWidth: "640px", margin: "0 auto", textAlign: "center" }}>
+        <div style={{ position: "relative", maxWidth: "560px", margin: "0 auto", textAlign: "center" }}>
           <p style={{
             fontSize: "11px", fontWeight: 600,
-            letterSpacing: "0.26em", textTransform: "uppercase",
-            color: "rgba(93,85,240,0.6)", marginBottom: "20px",
+            letterSpacing: "0.24em", textTransform: "uppercase",
+            color: "rgba(93,85,240,0.5)", marginBottom: "20px",
           }}>
             The Thesis
           </p>
           <p style={{
-            fontSize: "clamp(24px, 3.5vw, 38px)",
+            fontSize: "clamp(22px, 3vw, 34px)",
             fontWeight: 500, color: "#F0F4F8",
-            lineHeight: 1.25, letterSpacing: "-0.02em",
+            lineHeight: 1.3, letterSpacing: "-0.02em",
           }}>
             Those who join early gain{" "}
             <span style={{
-              backgroundImage: "linear-gradient(94deg, #7B73F8 0%, rgba(93,85,240,0.75) 100%)",
+              backgroundImage: "linear-gradient(94deg, #7B73F8 0%, #4a44b5 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
@@ -793,17 +696,17 @@ export default function Page() {
       <footer
         className="page-footer"
         style={{
-          padding: "32px 48px",
+          padding: "28px 48px",
           display: "flex", alignItems: "center",
           justifyContent: "space-between", flexWrap: "wrap", gap: "12px",
           borderTop: "1px solid rgba(255,255,255,0.04)",
         }}
       >
-        <span style={{ fontSize: "14px", fontWeight: 600, color: "rgba(255,255,255,0.3)" }}>
+        <span style={{ fontSize: "14px", fontWeight: 600, color: "rgba(255,255,255,0.25)" }}>
           binderr
         </span>
         <span style={{
-          fontSize: "11px", color: "rgba(127,146,173,0.3)",
+          fontSize: "11px", color: "rgba(127,146,173,0.25)",
           letterSpacing: "0.1em", textTransform: "uppercase",
         }}>
           © 2026 · Confidential · Do Not Distribute
@@ -813,7 +716,7 @@ export default function Page() {
       <style>{`
         @keyframes pulse {
           0%, 100% { opacity: 1; }
-          50% { opacity: 0.3; }
+          50% { opacity: 0.25; }
         }
       `}</style>
     </div>
