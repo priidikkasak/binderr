@@ -408,7 +408,7 @@ export default function Page() {
         className="page-header"
         style={{
           position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
-          height: "100px", display: "flex", alignItems: "center",
+          height: "120px", display: "flex", alignItems: "center",
           justifyContent: "space-between", padding: "0 48px",
           background: scrolled ? "rgba(0,8,13,0.97)" : "rgba(0,8,13,0.5)",
           backdropFilter: "blur(24px)",
@@ -417,7 +417,7 @@ export default function Page() {
         }}
       >
         {/* Logo */}
-        <img src="/logo.png" alt="Binderr" style={{ height: "100px", width: "auto" }} />
+        <img src="/logo.png" alt="Binderr" style={{ height: "120px", width: "auto" }} />
 
         {/* Nav — pill container */}
         <div className="hidden md:flex" style={{
@@ -476,7 +476,7 @@ export default function Page() {
         position: "relative", minHeight: "100vh",
         display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center",
-        overflow: "hidden", paddingTop: "100px",
+        overflow: "hidden", paddingTop: "120px",
       }}>
         {/* Top glow */}
         <div style={{
