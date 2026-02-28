@@ -224,7 +224,7 @@ function QARow({ item, index }: { item: Item; index: number }) {
         fontSize: "22px",
         fontWeight: 500,
         letterSpacing: "-0.01em",
-        color: item.highlight ? "rgba(93,85,240,0.55)" : "rgba(93,85,240,0.3)",
+        color: item.highlight ? "rgba(93,85,240,1)" : "rgba(93,85,240,0.75)",
         flexShrink: 0,
         width: "48px",
         paddingTop: "2px",
