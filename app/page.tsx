@@ -485,11 +485,11 @@ export default function Page() {
 
         @media (max-width: 767px) {
           /* Header */
-          .sticky-header { height: 180px !important; padding: 16px 20px 0 !important; align-items: flex-start !important; }
-          .header-logo   { height: 160px !important; }
+          .sticky-header { height: 180px !important; padding: 0 !important; }
+          .header-logo   { position: absolute !important; top: 12px !important; left: 16px !important; height: 160px !important; width: auto !important; }
 
-          /* Show burger, hide desktop spacer */
-          .burger-btn { display: flex !important; }
+          /* Show burger, pin top-right */
+          .burger-btn { display: flex !important; position: absolute !important; top: 20px !important; right: 20px !important; margin-top: 0 !important; }
 
           /* Mobile bottom nav */
           .mobile-nav { display: flex !important; }
