@@ -292,14 +292,15 @@ export default function Page() {
         className="page-header sticky-header"
         style={{
           position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
-          height: "160px", display: "flex", alignItems: "center",
+          height: "180px", display: "flex", alignItems: "center",
           justifyContent: "space-between", padding: "0 48px",
-          background: scrolled ? "rgba(0,8,13,0.97)" : "rgba(0,8,13,0.5)",
-          backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)",
-          transition: "background 0.4s",
+          background: scrolled ? "rgba(0,8,13,0.92)" : "transparent",
+          backdropFilter: scrolled ? "blur(24px)" : "none",
+          WebkitBackdropFilter: scrolled ? "blur(24px)" : "none",
+          transition: "background 0.5s ease, backdrop-filter 0.5s ease",
         }}
       >
-        <img src="/logo.png" alt="Binderr" className="header-logo" style={{ height: "160px", width: "auto" }} />
+        <img src="/logo.png" alt="Binderr" className="header-logo" style={{ height: "180px", width: "auto" }} />
 
         {/* Desktop nav pill */}
         <div className="hidden md:flex" style={{
@@ -341,7 +342,7 @@ export default function Page() {
           aria-label="Open menu"
         >
           <span style={{ display: "block", width: "22px", height: "1.5px", background: "rgba(240,244,248,0.8)", borderRadius: "2px" }} />
-          <span style={{ display: "block", width: "16px", height: "1.5px", background: "rgba(240,244,248,0.8)", borderRadius: "2px" }} />
+          <span style={{ display: "block", width: "22px", height: "1.5px", background: "rgba(240,244,248,0.8)", borderRadius: "2px" }} />
         </button>
 
         <span style={{ width: "120px" }} className="hidden md:block" />
@@ -352,7 +353,7 @@ export default function Page() {
         position: "relative", minHeight: "100vh",
         display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center",
-        overflow: "hidden", paddingTop: "160px",
+        overflow: "hidden", paddingTop: "180px",
       }}>
         <div style={{
           position: "absolute", top: "-200px", left: "50%", transform: "translateX(-50%)",
@@ -483,8 +484,8 @@ export default function Page() {
 
         @media (max-width: 767px) {
           /* Header */
-          .sticky-header { height: 80px !important; padding: 0 20px !important; }
-          .header-logo   { height: 66px !important; }
+          .sticky-header { height: 88px !important; padding: 0 20px !important; }
+          .header-logo   { height: 76px !important; }
 
           /* Show burger, hide desktop spacer */
           .burger-btn { display: flex !important; }
@@ -493,7 +494,7 @@ export default function Page() {
           .mobile-nav { display: flex !important; }
 
           /* Hero */
-          .hero-section  { padding-top: 80px !important; min-height: 100svh !important; padding-bottom: 60px !important; }
+          .hero-section  { padding-top: 88px !important; min-height: 100svh !important; padding-bottom: 60px !important; }
           .hero-content  { padding: 0 20px !important; }
           .hero-sub      { font-size: 14px !important; margin-bottom: 32px !important; max-width: 100% !important; }
 
@@ -501,9 +502,11 @@ export default function Page() {
           .eyebrow-badge { margin-bottom: 24px !important; padding: 4px 10px !important; }
           .eyebrow-text  { font-size: 9px !important; letter-spacing: 0.1em !important; }
 
-          /* Stats — force single row */
-          .stats-row     { flex-wrap: nowrap !important; gap: 20px !important; justify-content: space-between !important; width: 100%; }
-          .stat-val      { font-size: 20px !important; }
+          /* Stats — force single row, no label wrapping */
+          .stats-row     { flex-wrap: nowrap !important; gap: 12px !important; justify-content: space-between !important; width: 100% !important; }
+          .stat-val      { font-size: 18px !important; margin-bottom: 3px !important; }
+          .stats-row > div { min-width: 0 !important; }
+          .stats-row > div > div:last-child { font-size: 9px !important; letter-spacing: 0.1em !important; white-space: nowrap !important; }
 
           /* Content */
           .page-main { padding: 48px 20px 100px !important; }
