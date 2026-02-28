@@ -408,35 +408,67 @@ export default function Page() {
         className="page-header"
         style={{
           position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
-          height: "96px", display: "flex", alignItems: "center",
+          height: "100px", display: "flex", alignItems: "center",
           justifyContent: "space-between", padding: "0 48px",
-          background: scrolled ? "rgba(0,8,13,0.95)" : "rgba(0,8,13,0.6)",
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
+          background: scrolled ? "rgba(0,8,13,0.97)" : "rgba(0,8,13,0.5)",
+          backdropFilter: "blur(24px)",
+          WebkitBackdropFilter: "blur(24px)",
           transition: "background 0.4s",
         }}
       >
         {/* Logo */}
-        <img src="/logo.png" alt="Binderr" style={{ height: "80px", width: "auto" }} />
+        <img src="/logo.png" alt="Binderr" style={{ height: "100px", width: "auto" }} />
 
-        {/* Nav */}
-        <div className="hidden md:flex" style={{ alignItems: "center", gap: "32px" }}>
-          {SECTIONS.map((s) => (
-            <a key={s.id} href={`#${s.id}`} style={{
-              fontSize: "13px", fontWeight: 400,
-              color: "rgba(127,146,173,0.55)", textDecoration: "none",
-              transition: "color 0.2s",
-            }}
-            onMouseEnter={e => (e.currentTarget.style.color = "rgba(240,244,248,0.9)")}
-            onMouseLeave={e => (e.currentTarget.style.color = "rgba(127,146,173,0.55)")}
-            >
-              {s.title}
-            </a>
-          ))}
+        {/* Nav — pill container */}
+        <div className="hidden md:flex" style={{
+          alignItems: "center", gap: "2px",
+          background: "rgba(255,255,255,0.04)",
+          border: "1px solid rgba(255,255,255,0.07)",
+          borderRadius: "100px",
+          padding: "5px",
+          backdropFilter: "blur(12px)",
+        }}>
+          {SECTIONS.map((s, i) => {
+            const isActive = activeIdx === i;
+            return (
+              <a key={s.id} href={`#${s.id}`} style={{
+                display: "flex", alignItems: "center", gap: "6px",
+                padding: "7px 16px", borderRadius: "100px",
+                textDecoration: "none",
+                background: isActive ? "rgba(93,85,240,0.18)" : "transparent",
+                border: isActive ? "1px solid rgba(93,85,240,0.25)" : "1px solid transparent",
+                transition: "all 0.25s ease",
+              }}
+              onMouseEnter={e => {
+                if (!isActive) (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.05)";
+              }}
+              onMouseLeave={e => {
+                if (!isActive) (e.currentTarget as HTMLElement).style.background = "transparent";
+              }}
+              >
+                <span style={{
+                  fontSize: "10px", fontWeight: 500,
+                  color: isActive ? "rgba(93,85,240,0.9)" : "rgba(127,146,173,0.35)",
+                  letterSpacing: "0.05em", fontVariantNumeric: "tabular-nums",
+                  lineHeight: 1,
+                }}>
+                  {s.index}
+                </span>
+                <span style={{
+                  fontSize: "12px", fontWeight: isActive ? 500 : 400,
+                  color: isActive ? "#F0F4F8" : "rgba(127,146,173,0.6)",
+                  letterSpacing: "-0.01em",
+                  transition: "color 0.25s",
+                }}>
+                  {s.title}
+                </span>
+              </a>
+            );
+          })}
         </div>
 
-        {/* Right placeholder for balance */}
-        <span style={{ width: "80px" }} className="hidden md:block" />
+        {/* Right spacer */}
+        <span style={{ width: "120px" }} className="hidden md:block" />
       </header>
 
       {/* ── HERO ── */}
@@ -444,7 +476,7 @@ export default function Page() {
         position: "relative", minHeight: "100vh",
         display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center",
-        overflow: "hidden", paddingTop: "96px",
+        overflow: "hidden", paddingTop: "100px",
       }}>
         {/* Top glow */}
         <div style={{
@@ -629,7 +661,6 @@ export default function Page() {
           justifyContent: "space-between", flexWrap: "wrap", gap: "12px",
         }}
       >
-        <img src="/logo.png" alt="Binderr" style={{ height: "22px", width: "auto", opacity: 0.35 }} />
         <span style={{
           fontSize: "11px", color: "rgba(127,146,173,0.25)",
           letterSpacing: "0.1em", textTransform: "uppercase",
