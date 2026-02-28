@@ -94,15 +94,11 @@ const SECTIONS = [
         n: "12",
         q: "What we will always do",
         a: "Prioritize network growth, execution speed, and real provider-client matching that generates measurable economic value.",
-        tag: "Always",
-        tagType: "positive" as const,
       },
       {
         n: "13",
         q: "What we will never do",
         a: "Become a generic directory or sacrifice trust and quality for short-term growth.",
-        tag: "Never",
-        tagType: "negative" as const,
       },
       {
         n: "14",
@@ -181,8 +177,6 @@ type Item = {
   a: string;
   highlight?: boolean;
   big?: boolean;
-  tag?: string;
-  tagType?: "positive" | "negative";
   stat?: string;
   statLabel?: string;
   bullets?: string[];
@@ -219,8 +213,8 @@ function QARow({ item, index }: { item: Item; index: number }) {
       transition={{ duration: 0.4, delay: index * 0.055, ease: [0.16, 1, 0.3, 1] }}
       style={{
         display: "flex",
-        gap: "48px",
-        padding: "28px 0",
+        gap: "32px",
+        padding: "32px 0",
         borderTop: "1px solid rgba(255,255,255,0.05)",
         position: "relative",
       }}
@@ -238,14 +232,15 @@ function QARow({ item, index }: { item: Item; index: number }) {
 
       {/* Number */}
       <span style={{
-        fontSize: "11px",
-        fontWeight: 600,
-        letterSpacing: "0.18em",
-        color: "rgba(93,85,240,0.45)",
+        fontSize: "22px",
+        fontWeight: 500,
+        letterSpacing: "-0.01em",
+        color: item.highlight ? "rgba(93,85,240,0.55)" : "rgba(93,85,240,0.3)",
         flexShrink: 0,
-        width: "24px",
-        paddingTop: "3px",
-        paddingLeft: item.highlight ? "14px" : "0",
+        width: "48px",
+        paddingTop: "2px",
+        fontVariantNumeric: "tabular-nums",
+        lineHeight: 1,
       }}>
         {item.n}
       </span>
@@ -253,8 +248,8 @@ function QARow({ item, index }: { item: Item; index: number }) {
       {/* Content */}
       <div style={{ flex: 1, minWidth: 0 }}>
 
-        {/* Question + optional tag */}
-        <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px", flexWrap: "wrap" }}>
+        {/* Question */}
+        <div style={{ marginBottom: "10px" }}>
           <p style={{
             fontSize: "11px",
             fontWeight: 500,
@@ -265,21 +260,6 @@ function QARow({ item, index }: { item: Item; index: number }) {
           }}>
             {item.q}
           </p>
-          {item.tag && (
-            <span style={{
-              fontSize: "9px",
-              fontWeight: 600,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              color: item.tagType === "positive" ? "rgba(255,255,255,0.4)" : "rgba(220,80,80,0.6)",
-              border: `1px solid ${item.tagType === "positive" ? "rgba(255,255,255,0.1)" : "rgba(220,80,80,0.2)"}`,
-              padding: "2px 8px",
-              borderRadius: "100px",
-              flexShrink: 0,
-            }}>
-              {item.tag}
-            </span>
-          )}
         </div>
 
         {/* Answer */}
