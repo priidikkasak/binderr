@@ -362,15 +362,11 @@ export default function Page() {
 
   const [activeIdx, setActiveIdx] = useState(-1);
   const [scrolled, setScrolled] = useState(false);
-  const [headerHidden, setHeaderHidden] = useState(false);
-  const lastYRef = useRef(0);
 
   useEffect(() => {
     const fn = () => {
       const y = window.scrollY;
       setScrolled(y > 40);
-      setHeaderHidden(y > 180 && y > lastYRef.current);
-      lastYRef.current = y;
       let found = -1;
       for (let i = SECTIONS.length - 1; i >= 0; i--) {
         const el = document.getElementById(SECTIONS[i].id);
@@ -407,20 +403,17 @@ export default function Page() {
         ))}
       </nav>
 
-      {/* Header */}
-      <motion.header
+      {/* Header — always visible sticky */}
+      <header
         className="page-header"
-        animate={{ y: headerHidden ? -72 : 0, opacity: headerHidden ? 0 : 1 }}
-        transition={{ duration: 0.22, ease: "easeInOut" }}
         style={{
           position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
           height: "60px", display: "flex", alignItems: "center",
           justifyContent: "space-between", padding: "0 48px",
-          background: scrolled ? "rgba(0,8,13,0.94)" : "transparent",
-          backdropFilter: scrolled ? "blur(20px)" : "none",
-          WebkitBackdropFilter: scrolled ? "blur(20px)" : "none",
-          borderBottom: scrolled ? "1px solid rgba(255,255,255,0.05)" : "1px solid transparent",
-          transition: "background 0.4s, border-color 0.4s",
+          background: scrolled ? "rgba(0,8,13,0.95)" : "rgba(0,8,13,0.6)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          transition: "background 0.4s",
         }}
       >
         {/* Logo */}
@@ -444,7 +437,7 @@ export default function Page() {
 
         {/* Right placeholder for balance */}
         <span style={{ width: "80px" }} className="hidden md:block" />
-      </motion.header>
+      </header>
 
       {/* ── HERO ── */}
       <section style={{
@@ -491,7 +484,7 @@ export default function Page() {
             transition={{ delay: 0.1, duration: 0.6 }}
             style={{ marginBottom: "48px" }}
           >
-            <img src="/logo.png" alt="Binderr" style={{ height: "52px", width: "auto", margin: "0 auto", display: "block" }} />
+            <img src="/logo.png" alt="Binderr" style={{ height: "96px", width: "auto", margin: "0 auto", display: "block" }} />
           </motion.div>
 
           {/* Eyebrow */}
