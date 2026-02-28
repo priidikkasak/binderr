@@ -19,7 +19,7 @@ const SECTIONS = [
       {
         n: "02",
         q: "Why the world needs us",
-        a: "Starting and operating a business globally is fragmented, slow, and trust-constrained -Binderr removes friction, reduces risk, and compresses weeks of operational setup into a single streamlined experience.",
+        a: "Starting and operating a business globally is fragmented, slow, and trust-constrained - Binderr removes friction, reduces risk, and compresses weeks of operational setup into a single streamlined experience.",
       },
       {
         n: "03",
@@ -36,7 +36,7 @@ const SECTIONS = [
       {
         n: "04",
         q: "The secret we believe that others don't",
-        a: "The future is not individual providers competing for clients -it's infrastructure platforms owning distribution, trust, and onboarding at scale.",
+        a: "The future is not individual providers competing for clients - it's infrastructure platforms owning distribution, trust, and onboarding at scale.",
       },
       {
         n: "05",
@@ -127,7 +127,7 @@ const SECTIONS = [
         a: "",
         bullets: [
           "100+ new qualified providers onboarded",
-          "Expansion into 3–5 new key jurisdictions",
+          "Expansion into 3-5 new key jurisdictions",
           "Significant increase in Marketplace activity and deal flow",
         ],
       },
@@ -156,7 +156,7 @@ const SECTIONS = [
       {
         n: "20",
         q: "The narrative we want repeated",
-        a: "Binderr is becoming the infrastructure layer for global business operations -those who join early gain disproportionate access, growth, and opportunity.",
+        a: "Binderr is becoming the infrastructure layer for global business operations - those who join early gain disproportionate access, growth, and opportunity.",
       },
       {
         n: "21",
@@ -175,8 +175,6 @@ type Item = {
   a: string;
   highlight?: boolean;
   big?: boolean;
-  stat?: string;
-  statLabel?: string;
   bullets?: string[];
 };
 
@@ -210,25 +208,14 @@ function QARow({ item, index }: { item: Item; index: number }) {
       initial={{ opacity: 0, y: 10 }}
       animate={visible ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.4, delay: index * 0.055, ease: [0.16, 1, 0.3, 1] }}
-      style={{
-        display: "flex",
-        gap: "32px",
-        padding: "32px 0",
-        position: "relative",
-      }}
+      style={{ display: "flex", gap: "32px", padding: "28px 0", position: "relative" }}
     >
-
       {/* Number */}
       <span className="qa-num" style={{
-        fontSize: "22px",
-        fontWeight: 500,
-        letterSpacing: "-0.01em",
+        fontSize: "22px", fontWeight: 500, letterSpacing: "-0.01em",
         color: item.highlight ? "rgba(93,85,240,1)" : "rgba(93,85,240,0.75)",
-        flexShrink: 0,
-        width: "48px",
-        paddingTop: "2px",
-        fontVariantNumeric: "tabular-nums",
-        lineHeight: 1,
+        flexShrink: 0, width: "44px", paddingTop: "1px",
+        fontVariantNumeric: "tabular-nums", lineHeight: 1,
       }}>
         {item.n}
       </span>
@@ -237,82 +224,45 @@ function QARow({ item, index }: { item: Item; index: number }) {
       <div style={{ flex: 1, minWidth: 0 }}>
 
         {/* Question */}
-        <div className="qa-q" style={{ marginBottom: "10px" }}>
-          <p style={{
-            fontSize: "11px",
-            fontWeight: 500,
-            letterSpacing: "0.07em",
-            textTransform: "uppercase",
-            color: "#5A7A95",
-            lineHeight: 1.4,
-          }}>
-            {item.q}
-          </p>
-        </div>
+        <p className="qa-q" style={{
+          fontSize: "11px", fontWeight: 500,
+          letterSpacing: "0.07em", textTransform: "uppercase",
+          color: "#5A7A95", lineHeight: 1.4, marginBottom: "8px",
+        }}>
+          {item.q}
+        </p>
 
         {/* Answer */}
         {item.big ? (
-          <p style={{
-            fontSize: "clamp(18px, 2.2vw, 22px)",
-            fontWeight: 500,
-            color: "#F0F4F8",
-            lineHeight: 1.45,
-            letterSpacing: "-0.01em",
+          <p className="qa-answer" style={{
+            fontSize: "clamp(17px, 2.2vw, 22px)", fontWeight: 500,
+            color: "#F0F4F8", lineHeight: 1.5, letterSpacing: "-0.01em",
           }}>
             {item.a}
           </p>
         ) : item.bullets ? (
           <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "8px" }}>
             {item.bullets.map((b, i) => (
-              <li key={i} style={{
-                display: "flex", alignItems: "flex-start", gap: "12px",
-                fontSize: "15px", fontWeight: 400,
-                color: "#C2D4E4", lineHeight: 1.65,
+              <li key={i} className="qa-answer" style={{
+                display: "flex", alignItems: "flex-start", gap: "10px",
+                fontSize: "15px", fontWeight: 400, color: "#C2D4E4", lineHeight: 1.65,
               }}>
                 <span style={{
-                  marginTop: "9px",
-                  width: "3px", height: "3px",
-                  borderRadius: "50%",
-                  background: "rgba(93,85,240,0.5)",
-                  flexShrink: 0,
+                  marginTop: "9px", width: "3px", height: "3px",
+                  borderRadius: "50%", background: "rgba(93,85,240,0.6)", flexShrink: 0,
                 }} />
                 {b}
               </li>
             ))}
           </ul>
         ) : (
-          <p style={{
-            fontSize: "16px",
-            fontWeight: 400,
+          <p className="qa-answer" style={{
+            fontSize: "16px", fontWeight: 400,
             color: item.highlight ? "#D8E8F4" : "#C2D4E4",
             lineHeight: 1.7,
           }}>
             {item.a}
           </p>
-        )}
-
-        {/* Stat */}
-        {item.stat && (
-          <div style={{ marginTop: "20px", display: "flex", alignItems: "baseline", gap: "10px" }}>
-            <span style={{
-              fontSize: "38px",
-              fontWeight: 600,
-              color: "#F0F4F8",
-              letterSpacing: "-0.03em",
-              lineHeight: 1,
-            }}>
-              {item.stat}
-            </span>
-            <span style={{
-              fontSize: "11px",
-              fontWeight: 500,
-              textTransform: "uppercase",
-              letterSpacing: "0.14em",
-              color: "#5A7A95",
-            }}>
-              {item.statLabel}
-            </span>
-          </div>
         )}
       </div>
     </motion.div>
@@ -325,27 +275,22 @@ function Section({ section }: { section: (typeof SECTIONS)[0] }) {
   const { ref, visible } = useInView(0.04);
 
   return (
-    <section ref={ref} id={section.id} className="section-block" style={{ marginBottom: "96px", scrollMarginTop: "148px" }}>
+    <section ref={ref} id={section.id} className="section-block" style={{ marginBottom: "88px", scrollMarginTop: "148px" }}>
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={visible ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
       >
-        {/* Section header */}
-        <div style={{ marginBottom: "8px", paddingBottom: "20px" }}>
-          <h2 style={{
-            fontSize: "clamp(22px, 3vw, 30px)",
-            fontWeight: 500,
-            color: "#F0F4F8",
-            letterSpacing: "-0.02em",
-            lineHeight: 1,
+        <div className="section-title-wrap">
+          <h2 className="section-title" style={{
+            fontSize: "clamp(20px, 3vw, 30px)", fontWeight: 500,
+            color: "#F0F4F8", letterSpacing: "-0.02em", lineHeight: 1,
           }}>
             {section.title}
           </h2>
         </div>
       </motion.div>
 
-      {/* Items */}
       <div>
         {section.items.map((item, i) => (
           <QARow key={item.n} item={item} index={i} />
@@ -358,18 +303,19 @@ function Section({ section }: { section: (typeof SECTIONS)[0] }) {
 // ─── PAGE ───────────────────────────────────────────────────────────────────────
 
 export default function Page() {
-
   const [activeIdx, setActiveIdx] = useState(-1);
   const [scrolled, setScrolled] = useState(false);
+  const [pastHero, setPastHero] = useState(false);
 
   useEffect(() => {
     const fn = () => {
       const y = window.scrollY;
       setScrolled(y > 40);
+      setPastHero(y > window.innerHeight * 0.6);
       let found = -1;
       for (let i = SECTIONS.length - 1; i >= 0; i--) {
         const el = document.getElementById(SECTIONS[i].id);
-        if (el && el.getBoundingClientRect().top <= 120) { found = i; break; }
+        if (el && el.getBoundingClientRect().top <= 100) { found = i; break; }
       }
       setActiveIdx(found);
     };
@@ -380,21 +326,17 @@ export default function Page() {
   return (
     <div style={{ background: "#00080D", minHeight: "100vh" }}>
 
-
-      {/* Side nav dots */}
+      {/* Side nav dots — desktop only */}
       <nav className="hidden xl:flex" style={{
         position: "fixed", right: "28px", top: "50%",
         transform: "translateY(-50%)", zIndex: 40,
         flexDirection: "column", gap: "10px",
       }}>
         {SECTIONS.map((s, i) => (
-          <a key={s.id} href={`#${s.id}`} title={s.title}
-            style={{ display: "flex", alignItems: "center" }}>
+          <a key={s.id} href={`#${s.id}`} title={s.title} style={{ display: "flex", alignItems: "center" }}>
             <span style={{
-              display: "block",
-              height: "5px",
-              width: activeIdx === i ? "20px" : "5px",
-              borderRadius: "3px",
+              display: "block", height: "5px",
+              width: activeIdx === i ? "20px" : "5px", borderRadius: "3px",
               background: activeIdx === i ? "rgba(93,85,240,0.7)" : "rgba(255,255,255,0.1)",
               transition: "all 0.3s ease",
             }} />
@@ -402,7 +344,40 @@ export default function Page() {
         ))}
       </nav>
 
-      {/* Header -always visible sticky */}
+      {/* Mobile bottom section nav */}
+      <div className="mobile-nav" style={{
+        display: "none",
+        position: "fixed", bottom: "20px", left: "50%",
+        transform: `translateX(-50%) translateY(${pastHero ? "0" : "80px"})`,
+        zIndex: 50, alignItems: "center", gap: "6px",
+        background: "rgba(5,12,20,0.92)",
+        backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
+        border: "1px solid rgba(255,255,255,0.09)",
+        borderRadius: "100px", padding: "10px 18px",
+        transition: "transform 0.4s cubic-bezier(0.16,1,0.3,1)",
+        whiteSpace: "nowrap",
+      }}>
+        {SECTIONS.map((s, i) => (
+          <a key={s.id} href={`#${s.id}`} style={{
+            display: "block",
+            width: activeIdx === i ? "16px" : "5px", height: "5px",
+            borderRadius: "3px",
+            background: activeIdx === i ? "rgba(93,85,240,0.85)" : "rgba(255,255,255,0.18)",
+            transition: "all 0.3s ease", flexShrink: 0,
+          }} />
+        ))}
+        {activeIdx >= 0 && (
+          <span style={{
+            fontSize: "12px", fontWeight: 500,
+            color: "rgba(240,244,248,0.65)", letterSpacing: "-0.01em",
+            paddingLeft: "6px",
+          }}>
+            {SECTIONS[activeIdx].title}
+          </span>
+        )}
+      </div>
+
+      {/* Header */}
       <header
         className="page-header sticky-header"
         style={{
@@ -410,21 +385,18 @@ export default function Page() {
           height: "148px", display: "flex", alignItems: "center",
           justifyContent: "space-between", padding: "0 48px",
           background: scrolled ? "rgba(0,8,13,0.97)" : "rgba(0,8,13,0.5)",
-          backdropFilter: "blur(24px)",
-          WebkitBackdropFilter: "blur(24px)",
+          backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)",
           transition: "background 0.4s",
         }}
       >
-        {/* Logo */}
         <img src="/logo.png" alt="Binderr" className="header-logo" style={{ height: "148px", width: "auto" }} />
 
-        {/* Nav -pill container */}
+        {/* Nav pill — desktop */}
         <div className="hidden md:flex" style={{
           alignItems: "center", gap: "2px",
           background: "rgba(255,255,255,0.04)",
           border: "1px solid rgba(255,255,255,0.07)",
-          borderRadius: "100px",
-          padding: "5px",
+          borderRadius: "100px", padding: "5px",
           backdropFilter: "blur(12px)",
         }}>
           {SECTIONS.map((s, i) => {
@@ -438,26 +410,20 @@ export default function Page() {
                 border: isActive ? "1px solid rgba(93,85,240,0.25)" : "1px solid transparent",
                 transition: "all 0.25s ease",
               }}
-              onMouseEnter={e => {
-                if (!isActive) (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.05)";
-              }}
-              onMouseLeave={e => {
-                if (!isActive) (e.currentTarget as HTMLElement).style.background = "transparent";
-              }}
+              onMouseEnter={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.05)"; }}
+              onMouseLeave={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = "transparent"; }}
               >
                 <span style={{
                   fontSize: "10px", fontWeight: 500,
                   color: isActive ? "rgba(93,85,240,0.9)" : "rgba(127,146,173,0.35)",
-                  letterSpacing: "0.05em", fontVariantNumeric: "tabular-nums",
-                  lineHeight: 1,
+                  letterSpacing: "0.05em", fontVariantNumeric: "tabular-nums", lineHeight: 1,
                 }}>
                   {s.index}
                 </span>
                 <span style={{
                   fontSize: "12px", fontWeight: isActive ? 500 : 400,
                   color: isActive ? "#F0F4F8" : "rgba(127,146,173,0.6)",
-                  letterSpacing: "-0.01em",
-                  transition: "color 0.25s",
+                  letterSpacing: "-0.01em", transition: "color 0.25s",
                 }}>
                   {s.title}
                 </span>
@@ -466,7 +432,6 @@ export default function Page() {
           })}
         </div>
 
-        {/* Right spacer */}
         <span style={{ width: "120px" }} className="hidden md:block" />
       </header>
 
@@ -485,7 +450,6 @@ export default function Page() {
           background: "radial-gradient(circle, rgba(93,85,240,0.13) 0%, transparent 65%)",
           pointerEvents: "none",
         }} />
-
         {/* Grid */}
         <div style={{
           position: "absolute", inset: 0, pointerEvents: "none",
@@ -499,11 +463,8 @@ export default function Page() {
         }} />
 
         <motion.div
-          style={{
-            position: "relative", zIndex: 10,
-            textAlign: "center", padding: "0 24px",
-            maxWidth: "720px", width: "100%",
-          }}
+          className="hero-content"
+          style={{ position: "relative", zIndex: 10, textAlign: "center", padding: "0 24px", maxWidth: "720px", width: "100%" }}
           initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
@@ -515,7 +476,7 @@ export default function Page() {
             transition={{ delay: 0.2, duration: 0.5 }}
             style={{
               display: "inline-flex", alignItems: "center", gap: "8px",
-              marginBottom: "36px", padding: "6px 14px",
+              marginBottom: "32px", padding: "6px 14px",
               borderRadius: "100px",
               background: "rgba(255,255,255,0.03)",
               border: "1px solid rgba(255,255,255,0.07)",
@@ -536,31 +497,25 @@ export default function Page() {
           </motion.div>
 
           {/* Headline */}
-          <h1 style={{
-            fontSize: "clamp(46px, 8vw, 80px)",
-            fontWeight: 500,
-            lineHeight: 1.05,
-            letterSpacing: "-0.03em",
-            color: "#F0F4F8",
-            marginBottom: "24px",
+          <h1 className="hero-headline" style={{
+            fontSize: "clamp(40px, 8vw, 80px)",
+            fontWeight: 500, lineHeight: 1.05,
+            letterSpacing: "-0.03em", color: "#F0F4F8", marginBottom: "20px",
           }}>
             Connecting the
             <br />
             <span style={{
               backgroundImage: "linear-gradient(94deg, #6B63F5 0%, #4a44b5 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
+              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
             }}>
               world of business
             </span>
           </h1>
 
-          <p style={{
+          <p className="hero-sub" style={{
             fontSize: "17px", fontWeight: 400,
-            color: "#7F92AD",
-            lineHeight: 1.7, maxWidth: "440px",
-            margin: "0 auto 52px",
+            color: "#7F92AD", lineHeight: 1.7,
+            maxWidth: "440px", margin: "0 auto 44px",
           }}>
             We build trusted infrastructure so businesses can expand anywhere.
             21 strategic answers that define how we get there.
@@ -569,7 +524,7 @@ export default function Page() {
           {/* Stats */}
           <div style={{
             display: "flex", justifyContent: "center",
-            flexWrap: "wrap", gap: "clamp(28px, 6vw, 52px)",
+            flexWrap: "wrap", gap: "clamp(24px, 6vw, 52px)",
           }}>
             {[
               { val: "70,000+", label: "Verified Users" },
@@ -583,8 +538,8 @@ export default function Page() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.28 + i * 0.07 }}
               >
-                <div style={{
-                  fontSize: "28px", fontWeight: 600,
+                <div className="hero-stat-val" style={{
+                  fontSize: "clamp(22px, 5vw, 28px)", fontWeight: 600,
                   color: "#F0F4F8", letterSpacing: "-0.02em", marginBottom: "5px",
                 }}>
                   {s.val}
@@ -605,10 +560,7 @@ export default function Page() {
       {/* ── CONTENT ── */}
       <main
         className="page-main"
-        style={{
-          maxWidth: "760px", margin: "0 auto",
-          padding: "80px 40px 120px",
-        }}
+        style={{ maxWidth: "760px", margin: "0 auto", padding: "80px 40px 120px" }}
       >
         {SECTIONS.map((s) => (
           <Section key={s.id} section={s} />
@@ -616,9 +568,7 @@ export default function Page() {
       </main>
 
       {/* ── CLOSING ── */}
-      <div style={{
-        position: "relative", padding: "96px 24px",
-      }}>
+      <div className="closing-section" style={{ position: "relative", padding: "96px 24px" }}>
         <div style={{
           position: "absolute", inset: 0,
           background: "radial-gradient(ellipse 50% 80% at 50% 50%, rgba(93,85,240,0.07) 0%, transparent 70%)",
@@ -632,17 +582,15 @@ export default function Page() {
           }}>
             The Thesis
           </p>
-          <p style={{
-            fontSize: "clamp(22px, 3vw, 34px)",
+          <p className="closing-text" style={{
+            fontSize: "clamp(20px, 3vw, 34px)",
             fontWeight: 500, color: "#F0F4F8",
-            lineHeight: 1.3, letterSpacing: "-0.02em",
+            lineHeight: 1.35, letterSpacing: "-0.02em",
           }}>
             Those who join early gain{" "}
             <span style={{
               backgroundImage: "linear-gradient(94deg, #7B73F8 0%, #4a44b5 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
+              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
             }}>
               disproportionate access,
             </span>{" "}
@@ -655,7 +603,7 @@ export default function Page() {
       <footer
         className="page-footer"
         style={{
-          padding: "28px 48px",
+          padding: "24px 48px",
           display: "flex", alignItems: "center",
           justifyContent: "space-between", flexWrap: "wrap", gap: "12px",
         }}
@@ -673,15 +621,83 @@ export default function Page() {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.25; }
         }
+
         @media (max-width: 767px) {
-          .sticky-header { height: 76px !important; padding: 0 20px !important; }
-          .header-logo   { height: 66px !important; }
-          .hero-section  { padding-top: 76px !important; min-height: 100svh !important; }
-          .section-block { margin-bottom: 56px !important; scroll-margin-top: 76px !important; }
-          .qa-row        { gap: 14px !important; padding: 20px 0 !important; }
-          .qa-row .qa-num { font-size: 18px !important; width: 32px !important; }
-          .qa-row .qa-q  { font-size: 10px !important; margin-bottom: 7px !important; }
-          .qa-row .qa-a  { font-size: 14px !important; }
+          /* Header */
+          .sticky-header {
+            height: 70px !important;
+            padding: 0 20px !important;
+          }
+          .header-logo {
+            height: 58px !important;
+          }
+
+          /* Mobile bottom nav */
+          .mobile-nav {
+            display: flex !important;
+          }
+
+          /* Hero */
+          .hero-section {
+            padding-top: 70px !important;
+            min-height: 100svh !important;
+            padding-bottom: 60px !important;
+          }
+          .hero-content {
+            padding: 0 20px !important;
+          }
+          .hero-sub {
+            font-size: 15px !important;
+            margin-bottom: 36px !important;
+          }
+
+          /* Content */
+          .page-main {
+            padding: 52px 20px 100px !important;
+          }
+
+          /* Sections */
+          .section-block {
+            margin-bottom: 52px !important;
+            scroll-margin-top: 70px !important;
+          }
+          .section-title {
+            font-size: 19px !important;
+          }
+          .section-title-wrap {
+            padding-bottom: 12px !important;
+            margin-bottom: 0 !important;
+          }
+
+          /* Q&A rows */
+          .qa-row {
+            gap: 16px !important;
+            padding: 20px 0 !important;
+          }
+          .qa-num {
+            font-size: 16px !important;
+            width: 28px !important;
+          }
+          .qa-q {
+            font-size: 10px !important;
+            margin-bottom: 6px !important;
+          }
+          .qa-answer {
+            font-size: 14px !important;
+            line-height: 1.65 !important;
+          }
+
+          /* Closing */
+          .closing-section {
+            padding: 60px 20px !important;
+          }
+
+          /* Footer */
+          .page-footer {
+            padding: 20px !important;
+            justify-content: center !important;
+            padding-bottom: 80px !important;
+          }
         }
       `}</style>
     </div>
