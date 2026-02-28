@@ -302,8 +302,9 @@ export default function Page() {
       >
         <img src="/logo.png" alt="Binderr" className="header-logo" style={{ height: "180px", width: "auto" }} />
 
-        {/* Desktop nav pill */}
+        {/* Desktop nav pill — absolutely centered */}
         <div className="hidden md:flex" style={{
+          position: "absolute", left: "50%", transform: "translateX(-50%)",
           alignItems: "center", gap: "2px",
           background: "rgba(255,255,255,0.04)",
           border: "1px solid rgba(255,255,255,0.07)",
