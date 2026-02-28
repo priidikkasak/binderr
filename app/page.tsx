@@ -408,7 +408,7 @@ export default function Page() {
         className="page-header"
         style={{
           position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
-          height: "60px", display: "flex", alignItems: "center",
+          height: "96px", display: "flex", alignItems: "center",
           justifyContent: "space-between", padding: "0 48px",
           background: scrolled ? "rgba(0,8,13,0.95)" : "rgba(0,8,13,0.6)",
           backdropFilter: "blur(20px)",
@@ -417,7 +417,7 @@ export default function Page() {
         }}
       >
         {/* Logo */}
-        <img src="/logo.png" alt="Binderr" style={{ height: "52px", width: "auto" }} />
+        <img src="/logo.png" alt="Binderr" style={{ height: "80px", width: "auto" }} />
 
         {/* Nav */}
         <div className="hidden md:flex" style={{ alignItems: "center", gap: "32px" }}>
@@ -444,7 +444,7 @@ export default function Page() {
         position: "relative", minHeight: "100vh",
         display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center",
-        overflow: "hidden", paddingTop: "60px",
+        overflow: "hidden", paddingTop: "96px",
       }}>
         {/* Top glow */}
         <div style={{
