@@ -208,6 +208,7 @@ function QARow({ item, index }: { item: Item; index: number }) {
   return (
     <motion.div
       ref={ref}
+      className="qa-row"
       initial={{ opacity: 0, y: 10 }}
       animate={visible ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.4, delay: index * 0.055, ease: [0.16, 1, 0.3, 1] }}
@@ -220,7 +221,7 @@ function QARow({ item, index }: { item: Item; index: number }) {
     >
 
       {/* Number */}
-      <span style={{
+      <span className="qa-num" style={{
         fontSize: "22px",
         fontWeight: 500,
         letterSpacing: "-0.01em",
@@ -238,7 +239,7 @@ function QARow({ item, index }: { item: Item; index: number }) {
       <div style={{ flex: 1, minWidth: 0 }}>
 
         {/* Question */}
-        <div style={{ marginBottom: "10px" }}>
+        <div className="qa-q" style={{ marginBottom: "10px" }}>
           <p style={{
             fontSize: "11px",
             fontWeight: 500,
@@ -326,7 +327,7 @@ function Section({ section }: { section: (typeof SECTIONS)[0] }) {
   const { ref, visible } = useInView(0.04);
 
   return (
-    <section ref={ref} id={section.id} style={{ marginBottom: "96px", scrollMarginTop: "80px" }}>
+    <section ref={ref} id={section.id} className="section-block" style={{ marginBottom: "96px", scrollMarginTop: "148px" }}>
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={visible ? { opacity: 1, y: 0 } : {}}
@@ -405,10 +406,10 @@ export default function Page() {
 
       {/* Header — always visible sticky */}
       <header
-        className="page-header"
+        className="page-header sticky-header"
         style={{
           position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
-          height: "120px", display: "flex", alignItems: "center",
+          height: "148px", display: "flex", alignItems: "center",
           justifyContent: "space-between", padding: "0 48px",
           background: scrolled ? "rgba(0,8,13,0.97)" : "rgba(0,8,13,0.5)",
           backdropFilter: "blur(24px)",
@@ -417,7 +418,7 @@ export default function Page() {
         }}
       >
         {/* Logo */}
-        <img src="/logo.png" alt="Binderr" style={{ height: "120px", width: "auto" }} />
+        <img src="/logo.png" alt="Binderr" className="header-logo" style={{ height: "148px", width: "auto" }} />
 
         {/* Nav — pill container */}
         <div className="hidden md:flex" style={{
@@ -472,11 +473,11 @@ export default function Page() {
       </header>
 
       {/* ── HERO ── */}
-      <section style={{
+      <section className="hero-section" style={{
         position: "relative", minHeight: "100vh",
         display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center",
-        overflow: "hidden", paddingTop: "120px",
+        overflow: "hidden", paddingTop: "148px",
       }}>
         {/* Top glow */}
         <div style={{
@@ -570,7 +571,7 @@ export default function Page() {
           {/* Stats */}
           <div style={{
             display: "flex", justifyContent: "center",
-            flexWrap: "wrap", gap: "52px",
+            flexWrap: "wrap", gap: "clamp(28px, 6vw, 52px)",
           }}>
             {[
               { val: "70,000+", label: "Verified Users" },
@@ -673,6 +674,16 @@ export default function Page() {
         @keyframes pulse {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.25; }
+        }
+        @media (max-width: 767px) {
+          .sticky-header { height: 76px !important; padding: 0 20px !important; }
+          .header-logo   { height: 66px !important; }
+          .hero-section  { padding-top: 76px !important; min-height: 100svh !important; }
+          .section-block { margin-bottom: 56px !important; scroll-margin-top: 76px !important; }
+          .qa-row        { gap: 14px !important; padding: 20px 0 !important; }
+          .qa-row .qa-num { font-size: 18px !important; width: 32px !important; }
+          .qa-row .qa-q  { font-size: 10px !important; margin-bottom: 7px !important; }
+          .qa-row .qa-a  { font-size: 14px !important; }
         }
       `}</style>
     </div>
