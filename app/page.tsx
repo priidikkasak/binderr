@@ -296,16 +296,16 @@ export default function Page() {
       </div>
 
       {/* ── MOBILE HEADER ── */}
-      <header className="md:hidden" style={{
+      <header className="flex md:hidden" style={{
         position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
-        height: "180px", display: "flex", alignItems: "flex-start",
-        justifyContent: "space-between", padding: "14px 20px 0",
+        height: "80px", alignItems: "center",
+        justifyContent: "space-between", padding: "0 20px",
         background: scrolled ? "rgba(0,8,13,0.92)" : "transparent",
         backdropFilter: scrolled ? "blur(24px)" : "none",
         WebkitBackdropFilter: scrolled ? "blur(24px)" : "none",
         transition: "background 0.5s ease",
       }}>
-        <img src="/logo.png" alt="Binderr" style={{ height: "155px", width: "auto" }} />
+        <img src="/logo.png" alt="Binderr" style={{ height: "56px", width: "auto", marginLeft: "-8px" }} />
         <button onClick={() => setMenuOpen(true)} style={{
           background: "none", border: "none", cursor: "pointer",
           padding: "8px", display: "flex", flexDirection: "column",
@@ -498,7 +498,7 @@ export default function Page() {
           .mobile-nav { display: flex !important; }
 
           /* Hero */
-          .hero-section  { padding-top: 180px !important; min-height: 100svh !important; padding-bottom: 60px !important; justify-content: flex-start !important; }
+          .hero-section  { padding-top: 80px !important; min-height: 100svh !important; padding-bottom: 60px !important; }
           .hero-content  { padding: 0 20px !important; }
           .hero-sub      { font-size: 14px !important; margin-bottom: 32px !important; max-width: 100% !important; }
 
@@ -516,7 +516,7 @@ export default function Page() {
           .page-main { padding: 48px 20px 100px !important; }
 
           /* Sections */
-          .section-block     { margin-bottom: 52px !important; scroll-margin-top: 180px !important; }
+          .section-block     { margin-bottom: 52px !important; scroll-margin-top: 80px !important; }
           .section-title     { font-size: 19px !important; }
           .section-title-wrap { padding-bottom: 12px !important; }
 
