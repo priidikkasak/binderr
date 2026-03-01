@@ -295,30 +295,43 @@ export default function Page() {
         )}
       </div>
 
-      {/* ── HEADER ── */}
-      <header
-        className="page-header sticky-header"
-        style={{
-          position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
-          height: isMobile ? "180px" : "180px",
-          display: "flex", alignItems: "center",
-          justifyContent: "space-between",
-          padding: isMobile ? "0" : "0 48px 0 24px",
-          background: scrolled ? "rgba(0,8,13,0.92)" : "transparent",
-          backdropFilter: scrolled ? "blur(24px)" : "none",
-          WebkitBackdropFilter: scrolled ? "blur(24px)" : "none",
-          transition: "background 0.5s ease, backdrop-filter 0.5s ease",
-        }}
-      >
-        <img src="/logo.png" alt="Binderr" style={{
-          height: "160px", width: "auto",
-          ...(isMobile ? { position: "absolute", top: "12px", left: "16px" } : {}),
-        }} />
+      {/* ── MOBILE HEADER ── */}
+      <header className="md:hidden" style={{
+        position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
+        height: "180px", display: "flex", alignItems: "flex-start",
+        justifyContent: "space-between", padding: "14px 20px 0",
+        background: scrolled ? "rgba(0,8,13,0.92)" : "transparent",
+        backdropFilter: scrolled ? "blur(24px)" : "none",
+        WebkitBackdropFilter: scrolled ? "blur(24px)" : "none",
+        transition: "background 0.5s ease",
+      }}>
+        <img src="/logo.png" alt="Binderr" style={{ height: "155px", width: "auto" }} />
+        <button onClick={() => setMenuOpen(true)} style={{
+          background: "none", border: "none", cursor: "pointer",
+          padding: "8px", display: "flex", flexDirection: "column",
+          gap: "5px", alignItems: "flex-end", marginTop: "4px",
+        }} aria-label="Open menu">
+          <span style={{ display: "block", width: "22px", height: "1.5px", background: "rgba(240,244,248,0.8)", borderRadius: "2px" }} />
+          <span style={{ display: "block", width: "22px", height: "1.5px", background: "rgba(240,244,248,0.8)", borderRadius: "2px" }} />
+        </button>
+      </header>
 
-        {/* Desktop nav pill — absolutely centered both axes */}
-        <div className="hidden md:flex" style={{
+      {/* ── DESKTOP HEADER ── */}
+      <header className="hidden md:flex page-header" style={{
+        position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
+        height: "180px", alignItems: "center",
+        justifyContent: "space-between", padding: "0 48px 0 24px",
+        background: scrolled ? "rgba(0,8,13,0.92)" : "transparent",
+        backdropFilter: scrolled ? "blur(24px)" : "none",
+        WebkitBackdropFilter: scrolled ? "blur(24px)" : "none",
+        transition: "background 0.5s ease, backdrop-filter 0.5s ease",
+      }}>
+        <img src="/logo.png" alt="Binderr" style={{ height: "160px", width: "auto" }} />
+
+        {/* Nav pill — absolutely centered */}
+        <div style={{
           position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)",
-          alignItems: "center", gap: "2px",
+          display: "flex", alignItems: "center", gap: "2px",
           background: "rgba(255,255,255,0.04)",
           border: "1px solid rgba(255,255,255,0.07)",
           borderRadius: "100px", padding: "5px",
@@ -343,25 +356,7 @@ export default function Page() {
             );
           })}
         </div>
-
-        {/* Mobile burger button */}
-        <button
-          className="burger-btn"
-          onClick={() => setMenuOpen(true)}
-          style={{
-            display: isMobile ? "flex" : "none",
-            position: "absolute", top: "20px", right: "20px",
-            background: "none", border: "none",
-            cursor: "pointer", padding: "8px", flexDirection: "column",
-            gap: "5px", alignItems: "flex-end",
-          }}
-          aria-label="Open menu"
-        >
-          <span style={{ display: "block", width: "22px", height: "1.5px", background: "rgba(240,244,248,0.8)", borderRadius: "2px" }} />
-          <span style={{ display: "block", width: "22px", height: "1.5px", background: "rgba(240,244,248,0.8)", borderRadius: "2px" }} />
-        </button>
-
-        <span style={{ width: "120px" }} className="hidden md:block" />
+        <span style={{ width: "120px" }} />
       </header>
 
       {/* ── HERO ── */}
@@ -369,7 +364,7 @@ export default function Page() {
         position: "relative", minHeight: "100vh",
         display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center",
-        overflow: "hidden", paddingTop: isMobile ? "190px" : "180px",
+        overflow: "hidden", paddingTop: "180px",
       }}>
         <div style={{
           position: "absolute", top: "-200px", left: "50%", transform: "translateX(-50%)",
