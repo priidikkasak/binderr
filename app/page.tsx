@@ -305,7 +305,7 @@ export default function Page() {
         WebkitBackdropFilter: scrolled ? "blur(24px)" : "none",
         transition: "background 0.5s ease",
       }}>
-        <img src="/logo.png" alt="Binderr" style={{ height: "130px", width: "auto", marginLeft: "-43px" }} />
+        <img src="/logo.png" alt="Binderr" style={{ height: "130px", width: "auto", marginLeft: "-43px", marginTop: "10px" }} />
         <button onClick={() => setMenuOpen(true)} style={{
           background: "none", border: "none", cursor: "pointer",
           padding: "8px", display: "flex", flexDirection: "column",
