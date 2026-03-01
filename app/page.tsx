@@ -121,7 +121,7 @@ function QARow({ item, index }: { item: Item; index: number }) {
 function Section({ section }: { section: (typeof SECTIONS)[0] }) {
   const { ref, visible } = useInView(0.04);
   return (
-    <section ref={ref} id={section.id} className="section-block" style={{ marginBottom: "88px", scrollMarginTop: "160px" }}>
+    <section ref={ref} id={section.id} className="section-block" style={{ marginBottom: "88px", scrollMarginTop: "185px" }}>
       <motion.div initial={{ opacity: 0, y: 10 }} animate={visible ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}>
         <div className="section-title-wrap" style={{ paddingBottom: "20px" }}>
           <h2 className="section-title" style={{ fontSize: "clamp(20px, 3vw, 30px)", fontWeight: 500, color: "#F0F4F8", letterSpacing: "-0.02em", lineHeight: 1 }}>
@@ -155,10 +155,11 @@ export default function Page() {
       const y = window.scrollY;
       setScrolled(y > 40);
       setPastHero(y > window.innerHeight * 0.6);
+      const headerH = window.innerWidth < 768 ? 90 : 185;
       let found = -1;
       for (let i = SECTIONS.length - 1; i >= 0; i--) {
         const el = document.getElementById(SECTIONS[i].id);
-        if (el && el.getBoundingClientRect().top <= 100) { found = i; break; }
+        if (el && el.getBoundingClientRect().top <= headerH + 10) { found = i; break; }
       }
       setActiveIdx(found);
     };
@@ -213,7 +214,13 @@ export default function Page() {
                 <motion.a
                   key={s.id}
                   href={`#${s.id}`}
-                  onClick={() => setMenuOpen(false)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setMenuOpen(false);
+                    setTimeout(() => {
+                      document.getElementById(s.id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }, 300);
+                  }}
                   initial={{ opacity: 0, x: -16 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.05, duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
