@@ -326,7 +326,7 @@ export default function Page() {
         WebkitBackdropFilter: scrolled ? "blur(24px)" : "none",
         transition: "background 0.5s ease, backdrop-filter 0.5s ease",
       }}>
-        <img src="/logo.png" alt="Binderr" style={{ height: "160px", width: "auto" }} />
+        <img src="/logo.png" alt="Binderr" style={{ height: "160px", width: "auto", marginTop: "12px" }} />
 
         {/* Nav pill — absolutely centered */}
         <div style={{
